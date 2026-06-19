@@ -14,7 +14,15 @@ COPY --from=deps /app/node_modules ./node_modules
 # Copia o código da pasta agenda-saas-app para o diretório de build
 COPY agenda-saas-app/ .
 
-# Desativa a telemetria do Next.js no momento do build
+# Captura as variáveis de build fornecidas pelo EasyPanel
+ARG NEXT_PUBLIC_SUPABASE_URL
+ARG NEXT_PUBLIC_SUPABASE_ANON_KEY
+ARG NEXT_PUBLIC_APP_URL
+
+# Disponibiliza as variáveis no ambiente de build do Next.js
+ENV NEXT_PUBLIC_SUPABASE_URL=$NEXT_PUBLIC_SUPABASE_URL
+ENV NEXT_PUBLIC_SUPABASE_ANON_KEY=$NEXT_PUBLIC_SUPABASE_ANON_KEY
+ENV NEXT_PUBLIC_APP_URL=$NEXT_PUBLIC_APP_URL
 ENV NEXT_TELEMETRY_DISABLED=1
 
 # Executa o build de produção do Next.js
