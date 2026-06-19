@@ -1,0 +1,39 @@
+# Dependências de Node e builds
+agenda-saas-app/node_modules/
+agenda-saas-app/.next/
+agenda-saas-app/out/
+agenda-saas-app/build/
+agenda-saas-app/*.tsbuildinfo
+agenda-saas-app/next-env.d.ts
+
+# Arquivos de ambiente locais (Credenciais e chaves)
+agenda-saas-app/.env
+agenda-saas-app/.env*.local
+agenda-saas-app/.env.local
+
+# Logs e debugs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+agenda-saas-app/npm-debug.log*
+agenda-saas-app/yarn-debug.log*
+agenda-saas-app/yarn-error.log*
+agenda-saas-app/.pnpm-debug.log*
+
+# Supabase Local
+supabase/.temp/
+supabase/.branches/
+
+# Configurações de editores e IDEs
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Arquivos do sistema operacional
+.DS_Store
+Thumbs.db
