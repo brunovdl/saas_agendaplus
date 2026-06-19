@@ -8,6 +8,6 @@ if (!stripeSecretKey) {
   console.warn('[Stripe SDK] A variável STRIPE_SECRET_KEY não foi encontrada.');
 }
 
-export const stripe = new Stripe(stripeSecretKey || '', {
+export const stripe = new Stripe(stripeSecretKey || 'sk_test_dummy', {
   apiVersion: '2023-10-16' as any,
 });
