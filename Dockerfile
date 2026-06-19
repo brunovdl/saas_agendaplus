@@ -3,15 +3,16 @@ FROM node:20-alpine AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
-# Copia apenas os arquivos necessários para instalar as dependências
-COPY package.json package-lock.json ./
+# Copia apenas os arquivos de dependência do subdiretório
+COPY agenda-saas-app/package.json agenda-saas-app/package-lock.json ./
 RUN npm ci
 
 # 2. Build da aplicação
 FROM node:20-alpine AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
-COPY . .
+# Copia o código da pasta agenda-saas-app para o diretório de build
+COPY agenda-saas-app/ .
 
 # Desativa a telemetria do Next.js no momento do build
 ENV NEXT_TELEMETRY_DISABLED 1
@@ -29,7 +30,7 @@ ENV NEXT_TELEMETRY_DISABLED 1
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-# Copia os assets estáticos da pasta public
+# Copia os assets estáticos
 COPY --from=builder /app/public ./public
 
 # Define permissões para a pasta de cache do Next.js
@@ -47,5 +48,5 @@ EXPOSE 3000
 ENV PORT 3000
 ENV HOSTNAME "0.0.0.0"
 
-# O Next.js standalone gera um arquivo server.js para iniciar o servidor Node
+# O Next.js standalone gera o server.js para iniciar a aplicação
 CMD ["node", "server.js"]

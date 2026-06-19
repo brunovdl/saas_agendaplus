@@ -1,0 +1,10 @@
+agenda-saas-app/node_modules
+agenda-saas-app/.next
+supabase
+.git
+.gitignore
+.env
+agenda-saas-app/.env.local
+Dockerfile
+.dockerignore
+README.md
