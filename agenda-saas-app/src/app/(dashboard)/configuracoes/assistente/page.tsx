@@ -80,6 +80,7 @@ export default function AssistenteConfigPage() {
   const [qrCodeBase64, setQrCodeBase64] = useState<string | null>(null);
   const [qrLoading, setQrLoading] = useState(false);
   const [whatsappError, setWhatsappError] = useState<string | null>(null);
+  const [subscriptionTier, setSubscriptionTier] = useState<string>('free_trial');
 
   // Estados do formulário de novo serviço
   const [novoServicoNome, setNovoServicoNome] = useState('');
@@ -95,13 +96,14 @@ export default function AssistenteConfigPage() {
 
       const { data, error } = await supabase
         .from('prestadores')
-        .select('configuracao_assistente, whatsapp_status, whatsapp_numero')
+        .select('configuracao_assistente, whatsapp_status, whatsapp_numero, subscription_tier')
         .eq('id', user.id)
         .single();
 
       if (data) {
         setWhatsappStatus(data.whatsapp_status || 'disconnected');
         setWhatsappNumero(data.whatsapp_numero || null);
+        setSubscriptionTier(data.subscription_tier || 'free_trial');
 
         if (data.configuracao_assistente) {
           const loadedConfig = data.configuracao_assistente as unknown as ConfiguracaoAssistente;
@@ -290,6 +292,35 @@ export default function AssistenteConfigPage() {
   };
 
   const hasChanges = originalConfig ? JSON.stringify(config) !== JSON.stringify(originalConfig) : false;
+
+  if (subscriptionTier === 'normal') {
+    return (
+      <div className="flex-1 overflow-y-auto w-full bg-[#F4F7FB] min-h-screen flex items-center justify-center p-6">
+        <div className="max-w-md w-full bg-white rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.06)] border border-[#C6C6CF]/20 p-8 text-center space-y-6">
+          <div className="w-16 h-16 bg-[#00D4FF]/10 text-[#00677e] rounded-2xl flex items-center justify-center text-3xl mx-auto">
+            ✦
+          </div>
+          <div className="space-y-2">
+            <h3 className="text-xl font-bold text-[#0D1B3E]">Recurso Premium (IA)</h3>
+            <p className="text-sm text-[#45464E] leading-relaxed">
+              O assistente de IA personalizado e a conexão com o WhatsApp estão disponíveis exclusivamente no <strong>Plano Completo</strong>.
+            </p>
+          </div>
+          <div className="pt-2">
+            <button
+              onClick={() => router.push('/planos')}
+              className="w-full py-2.5 px-4 bg-[#0D1B3E] hover:bg-[#152448] text-white font-bold text-sm rounded-lg shadow-sm transition-all"
+            >
+              Fazer Upgrade de Plano
+            </button>
+          </div>
+          <p className="text-xs text-[#76767F]">
+            Mude de plano a qualquer momento no painel de assinaturas do Stripe.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex-1 overflow-y-auto w-full bg-[#F4F7FB] min-h-screen">

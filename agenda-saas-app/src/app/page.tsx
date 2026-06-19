@@ -538,61 +538,128 @@ export default async function HomePage() {
               </span>
               <h2 style={{ fontSize: 36, fontWeight: 700, color: '#FFFFFF',
                 letterSpacing: '-0.02em', margin: 0 }}>
-                Um único plano com tudo incluído
+                Escolha o plano ideal para o seu negócio
               </h2>
               <p style={{ fontSize: 16, color: 'rgba(255,255,255,0.7)', marginTop: 16, maxWidth: 560, margin: '16px auto 0' }}>
-                Transparência total para você escalar suas operações. Sem custos ocultos ou surpresas no final do mês.
+                Planos flexíveis para profissionais autônomos e clínicas. Teste grátis por 14 dias sem compromisso.
               </p>
             </div>
 
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-[1000px] mx-auto">
+              {/* Plano Normal */}
               <div style={{
-                width: '100%', maxWidth: '500px',
-                background: 'linear-gradient(135deg, #0D1B3E 0%, #152448 100%)',
+                background: 'rgba(13, 27, 62, 0.4)',
+                backdropFilter: 'blur(10px)',
                 borderRadius: 16,
-                border: '2px solid rgba(0,212,255,0.4)',
-                boxShadow: '0 10px 40px rgba(0,212,255,0.15)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                boxShadow: '0 4px 30px rgba(0, 0, 0, 0.2)',
                 padding: '40px 32px',
-                display: 'flex', flexDirection: 'column', gap: 28,
+                display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 28,
               }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <div>
-                    <h3 style={{ fontSize: 22, fontWeight: 700, color: '#FFFFFF', margin: 0 }}>Plano Pro</h3>
-                    <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)', margin: '4px 0 0' }}>Para profissionais de alta performance</p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div>
+                      <h3 style={{ fontSize: 22, fontWeight: 700, color: '#FFFFFF', margin: 0 }}>Plano Normal</h3>
+                      <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)', margin: '4px 0 0' }}>Organização e otimização da agenda</p>
+                    </div>
                   </div>
-                  <span style={{
-                    padding: '6px 12px', borderRadius: 9999,
-                    background: 'rgba(0,212,255,0.15)', color: '#00D4FF',
-                    fontSize: 11, fontWeight: 700, letterSpacing: '0.05em',
-                  }}>
-                    RECOMENDADO
+
+                  <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
+                    <span style={{ fontSize: 48, fontWeight: 800, color: '#FFFFFF' }}>R$ 39,90</span>
+                    <span style={{ fontSize: 16, color: 'rgba(255,255,255,0.6)' }}>/ mês</span>
+                  </div>
+
+                  <hr style={{ border: 'none', borderTop: '1px solid rgba(255,255,255,0.1)', margin: 0 }} />
+
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                    {[
+                      'Agendamentos e clientes ilimitados',
+                      'Calendário visual e real-time no painel',
+                      'Controle financeiro básico',
+                      'Configuração de múltiplos serviços',
+                      'Suporte via e-mail e painel',
+                    ].map((benefit, bi) => (
+                      <div key={bi} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                        <span style={{ color: 'rgba(255,255,255,0.6)', fontSize: 16 }}>✓</span>
+                        <span style={{ fontSize: 14.6, color: 'rgba(255,255,255,0.85)' }}>{benefit}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                  <Link
+                    href="/cadastro"
+                    className="btn-accent"
+                    style={{
+                      width: '100%',
+                      padding: '14px 28px',
+                      fontSize: 15,
+                      textDecoration: 'none',
+                      textAlign: 'center',
+                      background: 'transparent',
+                      border: '1px solid rgba(255, 255, 255, 0.2)',
+                      color: '#FFFFFF',
+                    }}
+                  >
+                    Começar Teste de 14 Dias
+                  </Link>
+                  <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', textAlign: 'center' }}>
+                    Não é necessário cartão de crédito.
                   </span>
                 </div>
+              </div>
 
-                <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
-                  <span style={{ fontSize: 48, fontWeight: 800, color: '#FFFFFF' }}>R$ 79</span>
-                  <span style={{ fontSize: 16, color: 'rgba(255,255,255,0.6)' }}>/ mês</span>
-                </div>
-
-                <hr style={{ border: 'none', borderTop: '1px solid rgba(255,255,255,0.1)', margin: 0 }} />
-
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-                  {[
-                    'Agendamentos e clientes ilimitados',
-                    'Assistente de IA integrada ao WhatsApp',
-                    'Calendário visual e real-time no painel',
-                    'Suporte prioritário via WhatsApp',
-                    'Configuração de múltiplos tipos de serviços',
-                    'Acesso a atualizações e novos recursos',
-                  ].map((benefit, bi) => (
-                    <div key={bi} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                      <span style={{ color: '#00D4FF', fontSize: 16 }}>✓</span>
-                      <span style={{ fontSize: 14.6, color: 'rgba(255,255,255,0.85)' }}>{benefit}</span>
+              {/* Plano Completo */}
+              <div style={{
+                background: 'linear-gradient(135deg, #0D1B3E 0%, #152448 100%)',
+                borderRadius: 16,
+                border: '2px solid rgba(0, 212, 255, 0.8)',
+                boxShadow: '0 10px 40px rgba(0, 212, 255, 0.25)',
+                padding: '40px 32px',
+                display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 28,
+                position: 'relative',
+              }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div>
+                      <h3 style={{ fontSize: 22, fontWeight: 700, color: '#FFFFFF', margin: 0 }}>Plano Completo</h3>
+                      <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)', margin: '4px 0 0' }}>Assistente de IA e automação total</p>
                     </div>
-                  ))}
+                    <span style={{
+                      padding: '6px 12px', borderRadius: 9999,
+                      background: 'rgba(0,212,255,0.2)', color: '#00D4FF',
+                      fontSize: 11, fontWeight: 700, letterSpacing: '0.05em',
+                    }}>
+                      POPULAR
+                    </span>
+                  </div>
+
+                  <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
+                    <span style={{ fontSize: 48, fontWeight: 800, color: '#FFFFFF' }}>R$ 79,90</span>
+                    <span style={{ fontSize: 16, color: 'rgba(255,255,255,0.6)' }}>/ mês</span>
+                  </div>
+
+                  <hr style={{ border: 'none', borderTop: '1px solid rgba(255,255,255,0.1)', margin: 0 }} />
+
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                    {[
+                      'Tudo do Plano Normal incluído',
+                      'Assistente de IA integrado ao WhatsApp',
+                      'Agendamentos e negociação 24/7',
+                      'QR Code próprio para conexão do WhatsApp',
+                      'Suporte prioritário via WhatsApp',
+                      'Acesso antecipado a novos recursos',
+                    ].map((benefit, bi) => (
+                      <div key={bi} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                        <span style={{ color: '#00D4FF', fontSize: 16 }}>✓</span>
+                        <span style={{ fontSize: 14.6, color: 'rgba(255,255,255,0.95)', fontWeight: bi > 0 && bi < 4 ? 600 : 400 }}>{benefit}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginTop: 8 }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
                   <Link
                     href="/cadastro"
                     className="btn-accent"
@@ -604,10 +671,10 @@ export default async function HomePage() {
                       textAlign: 'center',
                     }}
                   >
-                    Começar Teste Grátis de 14 Dias
+                    Começar Teste de 14 Dias
                   </Link>
                   <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', textAlign: 'center' }}>
-                    Não é necessário cartão de crédito para testar.
+                    Sem compromisso. Cancele quando quiser.
                   </span>
                 </div>
               </div>

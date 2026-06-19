@@ -257,8 +257,14 @@ export type Database = {
           nicho: string | null
           nome_completo: string
           nome_negocio: string
+          stripe_customer_id: string | null
+          stripe_subscription_id: string | null
+          subscription_ends_at: string | null
+          subscription_status: string | null
+          subscription_tier: string | null
           telefone: string | null
           timezone: string
+          trial_ends_at: string | null
           whatsapp_instance_name: string | null
           whatsapp_numero: string | null
           whatsapp_status: string | null
@@ -270,8 +276,14 @@ export type Database = {
           nicho?: string | null
           nome_completo: string
           nome_negocio: string
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
+          subscription_ends_at?: string | null
+          subscription_status?: string | null
+          subscription_tier?: string | null
           telefone?: string | null
           timezone?: string
+          trial_ends_at?: string | null
           whatsapp_instance_name?: string | null
           whatsapp_numero?: string | null
           whatsapp_status?: string | null
@@ -283,8 +295,14 @@ export type Database = {
           nicho?: string | null
           nome_completo?: string
           nome_negocio?: string
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
+          subscription_ends_at?: string | null
+          subscription_status?: string | null
+          subscription_tier?: string | null
           telefone?: string | null
           timezone?: string
+          trial_ends_at?: string | null
           whatsapp_instance_name?: string | null
           whatsapp_numero?: string | null
           whatsapp_status?: string | null
@@ -607,8 +625,8 @@ export const Constants = {
   },
 } as const
 
+// Tipos auxiliares personalizados exportados diretamente
 export type Agendamento = Database['public']['Tables']['agendamentos']['Row'];
 export type AnamnesePodologia = Database['public']['Tables']['anamneses_podologia']['Row'];
-export type Cliente = Database['public']['Tables']['clientes']['Row'];
 export type Prestador = Database['public']['Tables']['prestadores']['Row'];
-export type Profile = Database['public']['Tables']['profiles']['Row'];
+export type Cliente = Database['public']['Tables']['clientes']['Row'];
