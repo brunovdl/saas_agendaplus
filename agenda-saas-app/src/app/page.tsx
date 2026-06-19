@@ -724,10 +724,19 @@ export default async function HomePage() {
       <footer style={{ background: '#00020e', borderTop: '1px solid rgba(198,198,207,0.1)', padding: '40px 32px' }}>
         <div className="max-w-[1440px] mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
           <div style={{ textAlign: 'center' }} className="md:text-left">
-            <span style={{ fontSize: 18, fontWeight: 700, color: '#FFFFFF', display: 'block' }}>
-              Martins AI Automation
-            </span>
-            <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', marginTop: 4, display: 'block' }}>
+            <Link href="/" className="inline-block hover:opacity-90 transition-opacity">
+              <img
+                src="/logo_empresa.png"
+                alt="Martins AI Automation"
+                style={{
+                  height: '72px',
+                  width: 'auto',
+                  objectFit: 'contain',
+                  display: 'block',
+                }}
+              />
+            </Link>
+            <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', marginTop: 8, display: 'block' }}>
               © {new Date().getFullYear()} Martins AI Automation. Todos os direitos reservados.
             </span>
           </div>

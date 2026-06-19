@@ -6,10 +6,82 @@ import { revalidatePath } from 'next/cache';
 const EVOLUTION_API_URL = process.env.EVOLUTION_API_URL;
 const EVOLUTION_API_KEY = process.env.EVOLUTION_API_KEY;
 
-// Função auxiliar para sanitizar o ID do usuário como nome de instância válido
-function getCleanInstanceName(userId: string) {
+// Função auxiliar para sanitizar o ID do usuário e o nome do negócio como nome de instância válido
+function getCleanInstanceName(userId: string, nomeNegocio?: string | null) {
+  if (nomeNegocio) {
+    const cleanNegocio = nomeNegocio
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-zA-Z0-9]/g, '_')
+      .toLowerCase();
+    const cleanId = userId.replace(/[^a-zA-Z0-9]/g, '').substring(0, 8);
+    return `${cleanNegocio}_${cleanId}`;
+  }
   return `instancia_${userId.replace(/[^a-zA-Z0-9]/g, '')}`;
 }
+
+/**
+ * Configura síncronamente o comportamento (settings) e o webhook da instância na Evolution API.
+ */
+export async function configureInstanceHelper(instanceName: string) {
+  const EVOLUTION_API_URL = process.env.EVOLUTION_API_URL;
+  const EVOLUTION_API_KEY = process.env.EVOLUTION_API_KEY;
+  const webhookUrl = process.env.EVOLUTION_WEBHOOK_URL;
+
+  if (!EVOLUTION_API_URL || !EVOLUTION_API_KEY) {
+    console.error('[configureInstanceHelper] Evolution API não está configurada no servidor.');
+    return { error: 'Evolution API não configurada.' };
+  }
+
+  // 1. Configurar Comportamento (Settings)
+  try {
+    const settingsRes = await fetch(`${EVOLUTION_API_URL}/settings/set/${instanceName}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': EVOLUTION_API_KEY,
+      },
+      body: JSON.stringify({
+        groupsIgnore: true,
+        groups_ignore: true,
+        rejectCall: true,
+        reject_call: true,
+        readMessages: true,
+        read_messages: true,
+      }),
+    });
+    const settingsData = await settingsRes.json();
+    console.log(`[Evolution API Configure Settings Response for ${instanceName}]`, settingsData);
+  } catch (settingsErr) {
+    console.error(`[Evolution API Configure Settings Error for ${instanceName}]`, settingsErr);
+  }
+
+  // 2. Configurar Webhook
+  if (webhookUrl) {
+    try {
+      const webhookRes = await fetch(`${EVOLUTION_API_URL}/webhook/set/${instanceName}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': EVOLUTION_API_KEY,
+        },
+        body: JSON.stringify({
+          webhook: {
+            enabled: true,
+            url: webhookUrl,
+            byEvents: false,
+            events: ['MESSAGES_UPSERT'],
+          }
+        }),
+      });
+      const webhookData = await webhookRes.json();
+      console.log(`[Evolution API Configure Webhook Response for ${instanceName}]`, webhookData);
+    } catch (webhookErr) {
+      console.error(`[Evolution API Configure Webhook Error for ${instanceName}]`, webhookErr);
+    }
+  }
+}
+
 
 /**
  * Cria a instância na Evolution API (se necessário) e retorna o QR Code em base64.
@@ -23,7 +95,20 @@ export async function connectWhatsAppAction() {
   }
 
   const userId = authData.user.id;
-  const instanceName = getCleanInstanceName(userId);
+
+  // Buscar o prestador no banco para obter nome_negocio e whatsapp_instance_name se já existir
+  const { data: prestador, error: prestadorError } = await supabase
+    .from('prestadores')
+    .select('nome_negocio, whatsapp_instance_name')
+    .eq('id', userId)
+    .single();
+
+  if (prestadorError || !prestador) {
+    return { error: 'Prestador não encontrado no banco de dados.' };
+  }
+
+  // Se já existir no banco, reutiliza. Caso contrário, gera dinamicamente.
+  const instanceName = prestador.whatsapp_instance_name || getCleanInstanceName(userId, prestador.nome_negocio);
 
   if (!EVOLUTION_API_URL || !EVOLUTION_API_KEY) {
     return { error: 'Evolution API não está configurada no servidor (.env.local).' };
@@ -42,11 +127,24 @@ export async function connectWhatsAppAction() {
         token: userId, // Usamos o ID do usuário como token da instância
         qrcode: true,
         integration: 'WHATSAPP-BAILEYS',
+        settings: {
+          groupsIgnore: true,
+          groups_ignore: true,
+          rejectCall: true,
+          reject_call: true,
+          readMessages: true,
+          read_messages: true,
+        },
       }),
     });
 
     const createData = await createRes.json();
     console.log('[Evolution API Create Instance Response]', createData);
+
+    // Configurar comportamento e webhook (fallback/criação)
+    await configureInstanceHelper(instanceName);
+
+
 
     // Se já existia ou foi criada, vamos atualizar o banco para status 'connecting'
     await supabase
@@ -110,7 +208,15 @@ export async function checkWhatsAppConnectionAction() {
   }
 
   const userId = authData.user.id;
-  const instanceName = getCleanInstanceName(userId);
+
+  // Buscar o whatsapp_instance_name gravado no banco de dados
+  const { data: prestador } = await supabase
+    .from('prestadores')
+    .select('whatsapp_instance_name')
+    .eq('id', userId)
+    .single();
+
+  const instanceName = prestador?.whatsapp_instance_name || getCleanInstanceName(userId);
 
   if (!EVOLUTION_API_URL || !EVOLUTION_API_KEY) {
     return { error: 'Evolution API não configurada.' };
@@ -184,7 +290,15 @@ export async function disconnectWhatsAppAction() {
   }
 
   const userId = authData.user.id;
-  const instanceName = getCleanInstanceName(userId);
+
+  // Buscar o whatsapp_instance_name gravado no banco de dados
+  const { data: prestador } = await supabase
+    .from('prestadores')
+    .select('whatsapp_instance_name')
+    .eq('id', userId)
+    .single();
+
+  const instanceName = prestador?.whatsapp_instance_name || getCleanInstanceName(userId);
 
   if (!EVOLUTION_API_URL || !EVOLUTION_API_KEY) {
     return { error: 'Evolution API não configurada.' };

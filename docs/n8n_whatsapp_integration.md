@@ -87,6 +87,23 @@ Monte o seguinte fluxo no seu n8n usando os nós indicados:
 * **Method:** `POST`
 * O payload recebido trará o remetente em `data.key.remoteJid` e o nome da instância em `instance`.
 
+### Node: If (Filtro Anti-Loop)
+* **Type:** `If`
+* **Descrição:** Filtra as mensagens recebidas para garantir que o assistente não tente responder a mensagens enviadas por ele mesmo (o que geraria um loop infinito de mensagens).
+* **Condição**:
+  - **Left Value**: `{{ ($json.body?.data?.key?.fromMe ?? $json.data?.key?.fromMe)?.toString() }}`
+  - **Operator**: `notEquals` (String)
+  - **Right Value**: `true`
+* **Lógica**: Se `fromMe` for `true`, a mensagem foi enviada pelo próprio robô (assistente). Ao validar `notEquals "true"`, garantimos que o fluxo continue apenas para mensagens vindas do cliente final de forma dinâmica para todas as instâncias de clientes.
+
+### Node: Set (normalizePayload)
+* **Type:** `Set`
+* **Descrição:** Normaliza as variáveis básicas do webhook para facilitar o uso nos nós subsequentes.
+* **Campos configurados:**
+  - `instance`: `{{ $json.body?.instance ?? $json.instance }}`
+  - `remoteJid`: `{{ $json.body?.data?.key?.remoteJid ?? $json.data?.key?.remoteJid }}`
+  - `messageText`: `{{ $json.body?.data?.message?.conversation ?? $json.body?.data?.message?.extendedTextMessage?.text ?? $json.data?.message?.conversation ?? $json.data?.message?.extendedTextMessage?.text ?? "" }}`
+
 ### Node 2: Supabase (Obter Prestador)
 * **Operation:** `Get Many`
 * **Table:** `prestadores`
@@ -109,46 +126,85 @@ Utilize um nó de **AI Agent** conectado a um modelo de linguagem (ex: OpenAI GP
 #### System Prompt Dinâmico:
 Configure o Prompt do Agente dinamicamente usando as variáveis retornadas dos nós anteriores:
 ```text
-Você é {{ $node["Supabase: Prestador"].json.configuracao_assistente.nome_assistente }}, a secretária virtual da empresa "{{ $node["Supabase: Prestador"].json.nome_negocio }}".
-Sua missão é ajudar os clientes a agendarem serviços de forma 100% autônoma pelo WhatsApp.
+Você é {{ $node.getPrestador.json.configuracao_assistente.nome_assistente }}, a secretária virtual da empresa "{{ $node.getPrestador.json.nome_negocio }}". Sua missão é ajudar os clientes a agendarem, consultarem, cancelarem ou remarcarem serviços de forma 100% autônoma pelo WhatsApp. 
+Tom de voz: {{ $node.getPrestador.json.configuracao_assistente.tom_voz }}. 
+Serviços: {{ JSON.stringify($node.getPrestador.json.configuracao_assistente.servicos) }}. 
+Expediente: {{ JSON.stringify($node.getPrestador.json.configuracao_assistente.horario_funcionamento) }}. 
+Horários ocupados: {{ JSON.stringify($node.getAgendaOcupada.json) }}.
 
-Regras de Atendimento:
-1. Adote um tom de voz {{ $node["Supabase: Prestador"].json.configuracao_assistente.tom_voz }}.
-2. Nosso nicho de atuação é: {{ $node["Supabase: Prestador"].json.nicho }}.
-3. Oferecemos os seguintes serviços:
-{{ JSON.stringify($node["Supabase: Prestador"].json.configuracao_assistente.servicos, null, 2) }}
+O telefone do cliente atual é +{{ $node.normalizePayload.json.remoteJid.split('@')[0] }}. Não pergunte e nem tente chutar o número de telefone dele, use-o diretamente.
+Use a ferramenta ConfirmarAgendamento para agendar um novo serviço.
+Use a ferramenta ConsultarAgendamentos para ver os agendamentos ativos dele.
+Use a ferramenta CancelarAgendamento para cancelar um agendamento dele.
+Use a ferramenta RemarcarAgendamento para alterar o horário de um agendamento dele.
+A data e hora atual do sistema é {{ $now.toISO() }}.
 
-Nossos Horários de Funcionamento são:
-{{ JSON.stringify($node["Supabase: Prestador"].json.configuracao_assistente.horario_funcionamento, null, 2) }}
-
-Horários Indisponíveis (Já Ocupados):
-{{ JSON.stringify($node["Supabase: Agenda Ocupada"].json, null, 2) }}
-
-Instruções para Agendamento:
-- Quando o cliente escolher um serviço e um horário disponível dentro do nosso expediente, utilize a ferramenta "ConfirmarAgendamento" para salvar a reserva no sistema.
-- Lembre-se que as durações dos serviços devem ser respeitadas para não sobrepor outros clientes.
+Formato de Resposta
+- Use sempre o formato de lista com bullet points quando precisar mostrar opções para o usuário
 ```
 
-### Node 5: Tool "ConfirmarAgendamento" (Ferramenta de IA)
-Crie uma ferramenta (Tool) conectada ao Agente de IA para inserir agendamentos.
+### Node 5: Ferramentas do Supabase (Conectadas ao Agente de IA)
+
+O Agente utiliza 4 ferramentas do Supabase para interagir com o banco de dados. Elas utilizam expressões dinâmicas do n8n para isolar e filtrar os agendamentos de forma 100% segura por cliente (`cliente_telefone`) e prestador (`user_id`).
+
+#### 1. Tool "ConfirmarAgendamento" (Criar Agendamento)
 * **Name:** `ConfirmarAgendamento`
 * **Description:** *"Use esta ferramenta para confirmar o agendamento do cliente informando o nome do cliente, o nome do serviço (observações) e a data/hora de início/fim formatada em ISO 8601 (ex: 2026-06-19T14:00:00-03:00)."*
-* **Lógica Interna (JavaScript / Supabase Node)**:
-  Executa um `INSERT` na tabela `agendamentos` com os parâmetros recebidos:
-  ```json
-  {
-    "user_id": "{{ $node["Supabase: Prestador"].json.id }}",
-    "cliente_nome": "{{ $query.cliente_nome }}",
-    "cliente_telefone": "=+{{ $('normalizePayload').item.json.remoteJid.split('@')[0] }}",
-    "data_hora_inicio": "{{ $query.data_hora_inicio }}",
-    "data_hora_fim": "{{ new Date(new Date($query.data_hora_inicio).getTime() + ($query.duracao * 60 * 1000)).toISOString() }}",
-    "status": "confirmado",
-    "observacoes": "Agendado via WhatsApp pela Secretária Virtual"
-  }
-  ```
+* **Lógica Interna / Supabase Parameters**:
+  - **Operation**: `Insert`
+  - **Table**: `agendamentos`
+  - **Fields**:
+    - `user_id`: `{{ $node["Supabase: Prestador"].json.id }}`
+    - `cliente_nome`: `{{ $fromAI('cliente_nome', 'Nome completo do cliente') }}`
+    - `cliente_telefone`: `=+{{ $('normalizePayload').item.json.remoteJid.split('@')[0] }}`
+    - `data_hora_inicio`: `{{ $fromAI('data_hora_inicio', 'Data e hora do início do agendamento formatada em ISO 8601') }}`
+    - `data_hora_fim`: `{{ $fromAI('data_hora_fim', 'Data e hora do fim do agendamento formatada em ISO 8601') }}`
+    - `status`: `confirmado`
+    - `observacoes`: `Agendado via WhatsApp pela Secretária Virtual`
 
-  > [!IMPORTANT]
-  > Para evitar falhas devido à check constraint do Supabase (`agendamentos_cliente_telefone_check`), que exige formato E.164 (`^\+[1-9]\d{7,14}$`), o campo `cliente_telefone` **não** deve ser exposto como um parâmetro preenchível pela IA. Em vez disso, configure-o com o valor estático `=+{{ $('normalizePayload').item.json.remoteJid.split('@')[0] }}` para derivar automaticamente e formatar corretamente o número a partir do JID do WhatsApp.
+#### 2. Tool "ConsultarAgendamentos" (Listar Agendamentos)
+* **Name:** `ConsultarAgendamentos`
+* **Description:** *"Use esta ferramenta para consultar a lista de agendamentos ativos do cliente atual. O número de telefone e o prestador são identificados automaticamente."*
+* **Lógica Interna / Supabase Parameters**:
+  - **Operation**: `Get Many (getAll)`
+  - **Table**: `agendamentos`
+  - **Filter Type**: `manual`
+  - **Conditions (And)**:
+    - `user_id` = `{{ $('getPrestador').item.json.id }}`
+    - `cliente_telefone` = `=+{{ $('normalizePayload').item.json.remoteJid.split('@')[0] }}`
+    - `status` != `cancelado`
+
+#### 3. Tool "CancelarAgendamento" (Cancelar Agendamento)
+* **Name:** `CancelarAgendamento`
+* **Description:** *"Use esta ferramenta para cancelar um agendamento do cliente informando o ID do agendamento. O status será atualizado para 'cancelado'."*
+* **Lógica Interna / Supabase Parameters**:
+  - **Operation**: `Update`
+  - **Table**: `agendamentos`
+  - **Filter Type**: `manual`
+  - **Conditions (And)**:
+    - `id` = `{{ $fromAI('id', 'O ID numérico do agendamento que se deseja cancelar') }}`
+    - `user_id` = `{{ $('getPrestador').item.json.id }}`
+    - `cliente_telefone` = `=+{{ $('normalizePayload').item.json.remoteJid.split('@')[0] }}`
+  - **Fields**:
+    - `status`: `cancelado`
+
+#### 4. Tool "RemarcarAgendamento" (Remarcar Agendamento)
+* **Name:** `RemarcarAgendamento`
+* **Description:** *"Use esta ferramenta para alterar o horário de um agendamento do cliente informando o ID do agendamento e a nova data/hora de início/fim."*
+* **Lógica Interna / Supabase Parameters**:
+  - **Operation**: `Update`
+  - **Table**: `agendamentos`
+  - **Filter Type**: `manual`
+  - **Conditions (And)**:
+    - `id` = `{{ $fromAI('id', 'O ID numérico do agendamento que se deseja remarcar') }}`
+    - `user_id` = `{{ $('getPrestador').item.json.id }}`
+    - `cliente_telefone` = `=+{{ $('normalizePayload').item.json.remoteJid.split('@')[0] }}`
+  - **Fields**:
+    - `data_hora_inicio`: `{{ $fromAI('data_hora_inicio', 'Nova data e hora do início do agendamento formatada em ISO 8601') }}`
+    - `data_hora_fim`: `{{ $fromAI('data_hora_fim', 'Nova data e hora do fim do agendamento formatada em ISO 8601') }}`
+
+> [!IMPORTANT]
+> Para evitar falhas devido à check constraint do Supabase (`agendamentos_cliente_telefone_check`), que exige formato E.164 (`^\+[1-9]\d{7,14}$`), o campo `cliente_telefone` **não** deve ser exposto como um parâmetro preenchível pela IA. Em vez disso, configure-o com o valor estático `=+{{ $('normalizePayload').item.json.remoteJid.split('@')[0] }}` para derivar automaticamente e formatar corretamente o número a partir do JID do WhatsApp.
 
 ### Node 6: HTTP Request (Enviar Mensagem no WhatsApp)
 Após o agente de IA formular a resposta final (`output`), este nó envia o texto de volta ao cliente:

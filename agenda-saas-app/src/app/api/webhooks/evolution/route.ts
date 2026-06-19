@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createAdminClient } from '@/lib/supabase/admin';
+import { configureInstanceHelper } from '@/app/actions/evolution';
 
 export async function POST(req: Request) {
   try {
@@ -24,6 +25,10 @@ export async function POST(req: Request) {
       let status = 'disconnected';
       if (state === 'open') {
         status = 'connected';
+        // Configurar a instância de forma assíncrona assim que estiver oficialmente conectada (socket WA aberto)
+        configureInstanceHelper(instanceName).catch((err) => {
+          console.error('[Evolution Webhook Behavior Config Error]', err);
+        });
       } else if (state === 'connecting') {
         status = 'connecting';
       } else {
