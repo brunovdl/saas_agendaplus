@@ -120,20 +120,7 @@ export default function AgendaCalendar() {
 
   return (
     <div className="h-full w-full custom-calendar-wrapper p-2 md:p-4 relative">
-      <div className="hidden md:flex justify-between items-center mb-3 md:mb-4">
-        <button 
-          onClick={() => {
-            setSelectedEventId(undefined);
-            setSelectedDate(undefined);
-            setIsModalOpen(true);
-          }}
-          className="btn-accent text-sm py-2 px-3 md:py-2.5 md:px-5"
-        >
-          + Novo Agendamento
-        </button>
-      </div>
-
-      <div style={{ height: 'calc(100% - 56px)' }} className="calendar-scroll-wrapper">
+      <div style={{ height: '100%' }} className="calendar-scroll-wrapper">
         <FullCalendar
           ref={calendarRef}
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
@@ -195,14 +182,14 @@ export default function AgendaCalendar() {
         </div>
       )}
 
-      {/* Floating Action Button (FAB) no mobile */}
+      {/* Floating Action Button (FAB) / Widget flutuante para criar novo agendamento */}
       <button
         onClick={() => {
           setSelectedEventId(undefined);
           setSelectedDate(undefined);
           setIsModalOpen(true);
         }}
-        className="md:hidden fixed bottom-20 right-4 z-40 w-14 h-14 bg-[#00D4FF] hover:bg-[#00A8CC] text-[#0D1B3E] rounded-xl flex items-center justify-center shadow-lg active:scale-95 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00D4FF]"
+        className="fixed bottom-20 md:bottom-8 right-4 md:right-8 z-40 w-14 h-14 bg-[#00D4FF] hover:bg-[#00A8CC] text-[#0D1B3E] rounded-xl flex items-center justify-center shadow-lg active:scale-95 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00D4FF]"
         title="Novo Agendamento"
         aria-label="Novo Agendamento"
       >
