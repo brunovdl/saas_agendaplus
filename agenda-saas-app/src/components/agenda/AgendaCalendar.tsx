@@ -8,7 +8,7 @@ import interactionPlugin from '@fullcalendar/interaction';
 import { createClient } from '@/lib/supabase/client';
 import type { Agendamento } from '@/types/supabase';
 import AgendamentoForm from '@/components/agendamentos/AgendamentoForm';
-import { Plus } from 'lucide-react';
+import { Plus, X } from 'lucide-react';
 
 // Helper de mapeamento de cores dos chips de status para o calendário
 const STATUS_COLORS: Record<string, string> = {
@@ -160,28 +160,25 @@ export default function AgendaCalendar() {
         />
       </div>
 
-      {/* Modal Overlay — mobile: 95% largura / 90% altura; desktop: max-w-lg */}
+      {/* Modal Overlay — idêntico ao de Novo Cliente */}
       {isModalOpen && (
-        <div className="absolute inset-0 z-50 flex items-end md:items-center justify-center bg-[#0D1B3E]/20 backdrop-blur-sm p-0 md:p-4">
-          <div className="bg-white shadow-2xl border border-gray-200 overflow-hidden flex flex-col
-            w-[95%] max-h-[90dvh] rounded-t-2xl md:rounded-xl md:max-w-lg md:w-full">
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 animate-fade-in">
+          <div className="bg-white rounded-xl shadow-[0_10px_30px_rgba(0,0,0,0.15)] w-full max-w-md overflow-hidden relative border border-[#C6C6CF]/20 max-h-[90dvh] flex flex-col">
             {/* Header */}
-            <div className="px-4 md:px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50 shrink-0">
-              {/* Drag handle visual no mobile */}
-              <div className="absolute top-2 left-1/2 -translate-x-1/2 w-10 h-1 bg-gray-300 rounded-full md:hidden" />
-              <h2 className="text-lg font-bold text-[#0D1B3E]">
+            <div className="px-6 py-4 border-b border-[#C6C6CF]/20 flex justify-between items-center bg-[#F8FAFC]">
+              <h3 className="font-bold text-lg text-[#0D1B3E]">
                 {selectedEventId ? 'Editar Agendamento' : 'Novo Agendamento'}
-              </h2>
+              </h3>
               <button
-                className="w-8 h-8 flex items-center justify-center rounded-full text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors"
                 onClick={handleModalClose}
+                className="text-gray-400 hover:text-gray-600 transition-colors"
                 aria-label="Fechar"
               >
-                ✕
+                <X size={20} />
               </button>
             </div>
             {/* Body com scroll */}
-            <div className="p-4 md:p-6 overflow-y-auto flex-1">
+            <div className="p-6 overflow-y-auto flex-1">
               <AgendamentoForm 
                 initialData={
                   selectedAgendamento
