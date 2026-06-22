@@ -37,3 +37,7 @@ supabase/.branches/
 # Arquivos do sistema operacional
 .DS_Store
 Thumbs.db
+
+# Agente
+.agent/
+GEMINI.md

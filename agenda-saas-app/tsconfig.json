@@ -4,7 +4,7 @@
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
-    // Tipagem estrita — PROJECT_SPEC.md: nenhum tipo `any` permitido
+    // Tipagem estrita — .agent/PROJECT_SPEC.md: nenhum tipo `any` permitido
     "strict": true,
     "noImplicitAny": true,
     "noUncheckedIndexedAccess": true,

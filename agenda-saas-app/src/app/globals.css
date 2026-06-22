@@ -262,6 +262,60 @@ body {
   border-color: var(--color-cyan) !important;
 }
 
+/* ─── FullCalendar Mobile Overrides ─────────────────────────── */
+
+/* Habilita scroll horizontal na grade de semana em telas pequenas */
+.calendar-scroll-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.calendar-scroll-wrapper .fc {
+  min-width: 480px; /* garante que as 7 colunas não fiquem espremidas */
+}
+
+/* No mobile: esconde botões de visão (Mês, Semana, Dia) do toolbar */
+@media (max-width: 767px) {
+  .custom-calendar-wrapper .fc-dayGridMonth-button,
+  .custom-calendar-wrapper .fc-timeGridWeek-button,
+  .custom-calendar-wrapper .fc-timeGridDay-button {
+    display: none !important;
+  }
+
+  /* Botões prev/next/today menores */
+  .custom-calendar-wrapper .fc-button {
+    padding: 4px 8px !important;
+    font-size: 12px !important;
+  }
+
+  /* Título do mês/semana menor */
+  .custom-calendar-wrapper .fc-toolbar-title {
+    font-size: 14px !important;
+    font-weight: 700;
+  }
+
+  /* Header das colunas de dia menor */
+  .custom-calendar-wrapper .fc-col-header-cell-cushion {
+    font-size: 11px !important;
+    padding: 4px 2px !important;
+  }
+
+  /* Slot time (hora) menor */
+  .custom-calendar-wrapper .fc-timegrid-slot-label-cushion {
+    font-size: 10px !important;
+    padding-right: 4px;
+  }
+
+  /* Eventos menores no mobile */
+  .custom-calendar-wrapper .fc-event-main {
+    font-size: 10px !important;
+  }
+
+  /* Padding interno do calendário menor */
+  .custom-calendar-wrapper .fc {
+    padding: 8px !important;
+  }
+}
+
 /* ─── Regras de Impressão (PDF) ────────────────────────────── */
 @media print {
   html,

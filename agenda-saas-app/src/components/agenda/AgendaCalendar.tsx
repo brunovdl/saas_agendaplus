@@ -118,21 +118,21 @@ export default function AgendaCalendar() {
   };
 
   return (
-    <div className="h-full w-full custom-calendar-wrapper p-4 relative">
-      <div className="flex justify-between items-center mb-4">
+    <div className="h-full w-full custom-calendar-wrapper p-2 md:p-4 relative">
+      <div className="flex justify-between items-center mb-3 md:mb-4">
         <button 
           onClick={() => {
             setSelectedEventId(undefined);
             setSelectedDate(undefined);
             setIsModalOpen(true);
           }}
-          className="btn-accent"
+          className="btn-accent text-sm py-2 px-3 md:py-2.5 md:px-5"
         >
-          Novo Agendamento
+          + Novo Agendamento
         </button>
       </div>
 
-      <div style={{ height: 'calc(100% - 60px)' }}>
+      <div style={{ height: 'calc(100% - 56px)' }} className="calendar-scroll-wrapper">
         <FullCalendar
           ref={calendarRef}
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
@@ -159,19 +159,28 @@ export default function AgendaCalendar() {
         />
       </div>
 
-      {/* Modal Overlay (Estilo Stitch Design) */}
+      {/* Modal Overlay — mobile: 95% largura / 90% altura; desktop: max-w-lg */}
       {isModalOpen && (
-        <div className="absolute inset-0 z-50 flex items-center justify-center bg-[#0D1B3E]/20 backdrop-blur-sm p-4">
-          <div className="bg-white rounded-xl shadow-2xl w-full max-w-lg border border-gray-200 overflow-hidden flex flex-col max-h-[90vh]">
-            <div className="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
+        <div className="absolute inset-0 z-50 flex items-end md:items-center justify-center bg-[#0D1B3E]/20 backdrop-blur-sm p-0 md:p-4">
+          <div className="bg-white shadow-2xl border border-gray-200 overflow-hidden flex flex-col
+            w-[95%] max-h-[90dvh] rounded-t-2xl md:rounded-xl md:max-w-lg md:w-full">
+            {/* Header */}
+            <div className="px-4 md:px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50 shrink-0">
+              {/* Drag handle visual no mobile */}
+              <div className="absolute top-2 left-1/2 -translate-x-1/2 w-10 h-1 bg-gray-300 rounded-full md:hidden" />
               <h2 className="text-lg font-bold text-[#0D1B3E]">
                 {selectedEventId ? 'Editar Agendamento' : 'Novo Agendamento'}
               </h2>
-              <button className="text-gray-400 hover:text-gray-700" onClick={handleModalClose}>
+              <button
+                className="w-8 h-8 flex items-center justify-center rounded-full text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors"
+                onClick={handleModalClose}
+                aria-label="Fechar"
+              >
                 ✕
               </button>
             </div>
-            <div className="p-6 overflow-y-auto">
+            {/* Body com scroll */}
+            <div className="p-4 md:p-6 overflow-y-auto flex-1">
               <AgendamentoForm 
                 initialData={
                   selectedAgendamento

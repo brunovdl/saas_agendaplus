@@ -15,7 +15,10 @@ export default function BottomNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="md:hidden flex justify-around items-center bg-white border-t border-gray-200 py-3 px-4 w-full print:hidden">
+    <nav
+      className="md:hidden flex justify-around items-center bg-white border-t border-gray-200 px-2 w-full print:hidden"
+      style={{ paddingBottom: 'max(12px, env(safe-area-inset-bottom))', paddingTop: '8px' }}
+    >
       {navItems.map((item) => {
         const isActive = item.href === '/agenda'
           ? pathname === '/agenda' || pathname.startsWith('/agenda/')
@@ -26,12 +29,12 @@ export default function BottomNav() {
           <Link
             key={item.name}
             href={item.href}
-            className={`flex flex-col items-center ${
+            className={`flex flex-col items-center justify-center min-w-[56px] py-1 rounded-lg transition-colors ${
               isActive ? 'text-blue-600' : 'text-gray-500'
             }`}
           >
-            <Icon size={24} strokeWidth={isActive ? 2.5 : 2} />
-            <span className={`text-[10px] mt-1 ${isActive ? 'font-bold' : 'font-medium'}`}>
+            <Icon size={22} strokeWidth={isActive ? 2.5 : 2} />
+            <span className={`text-[10px] mt-0.5 ${isActive ? 'font-bold' : 'font-medium'}`}>
               {item.name}
             </span>
           </Link>

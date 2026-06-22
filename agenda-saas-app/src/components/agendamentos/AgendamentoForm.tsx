@@ -85,7 +85,7 @@ export default function AgendamentoForm({ initialData, onSuccess, onCancel }: Ag
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} style={{ display: 'flex', flexDirection: 'column', gap: '16px', maxWidth: '600px' }}>
+    <form onSubmit={handleSubmit(onSubmit)} style={{ display: 'flex', flexDirection: 'column', gap: '16px', width: '100%' }}>
       
       {serverError && (
         <div style={{ padding: '12px', background: '#FEE2E2', color: '#B91C1C', borderRadius: '8px', fontSize: '14px' }}>
@@ -154,11 +154,11 @@ export default function AgendamentoForm({ initialData, onSuccess, onCancel }: Ag
         {errors.observacoes && <p className="error-msg">{errors.observacoes.message}</p>}
       </div>
 
-      <div style={{ display: 'flex', gap: '12px', marginTop: '8px' }}>
-        <button type="submit" className="btn-primary" disabled={isPending}>
+      <div className="flex flex-col sm:flex-row gap-3 mt-2">
+        <button type="submit" className="btn-primary flex-1" disabled={isPending}>
           {isPending ? 'Salvando...' : isEdit ? 'Salvar Alterações' : 'Criar Agendamento'}
         </button>
-        <button type="button" className="btn-outline" onClick={() => (onCancel ? onCancel() : router.back())} disabled={isPending}>
+        <button type="button" className="btn-outline flex-1" onClick={() => (onCancel ? onCancel() : router.back())} disabled={isPending}>
           Cancelar
         </button>
       </div>
