@@ -57,26 +57,13 @@ export default function ClientesPage() {
       <header className="hidden md:flex justify-between items-center px-8 py-6 border-b border-[#C6C6CF]/20 bg-white sticky top-0 z-20 shadow-sm">
         <div>
           <h2 className="text-[32px] font-bold leading-[1.3] text-[#0D1B3E]">Clientes</h2>
-          <p className="text-sm text-[#45464E] mt-1">Gerencie a base de clientes do seu negócio e acesse seus perfis.</p>
+          <p className="text-sm text-[#45464E] mt-1">Gerencie a base de clientes do seu negócio e acesse seus profiles.</p>
         </div>
-        <button
-          onClick={() => { setErrorMsg(null); setIsModalOpen(true); }}
-          className="flex items-center gap-2 px-6 py-2.5 bg-[#0D1B3E] text-white font-bold text-sm rounded-[6px] hover:bg-[#152448] transition-colors shadow-sm"
-        >
-          <Plus size={16} />
-          Novo Cliente
-        </button>
       </header>
 
       {/* Header Mobile */}
       <div className="md:hidden flex justify-between items-center px-4 py-4 bg-white border-b border-gray-200">
         <h2 className="text-xl font-bold text-[#0D1B3E]">Clientes</h2>
-        <button
-          onClick={() => { setErrorMsg(null); setIsModalOpen(true); }}
-          className="p-2 bg-[#0D1B3E] text-white rounded-full"
-        >
-          <Plus size={20} />
-        </button>
       </div>
 
       <div className="max-w-6xl mx-auto px-4 md:px-8 py-8">
@@ -266,6 +253,15 @@ export default function ClientesPage() {
           </div>
         </div>
       )}
+      {/* Floating Action Button (FAB) / Widget flutuante para criar novo cliente */}
+      <button
+        onClick={() => { setErrorMsg(null); setIsModalOpen(true); }}
+        className="fixed bottom-20 md:bottom-8 right-4 md:right-8 z-40 w-14 h-14 bg-[#00D4FF] hover:bg-[#00A8CC] text-[#0D1B3E] rounded-xl flex items-center justify-center shadow-lg active:scale-95 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00D4FF]"
+        title="Novo Cliente"
+        aria-label="Novo Cliente"
+      >
+        <Plus size={24} strokeWidth={3} />
+      </button>
     </div>
   );
 }
