@@ -8,6 +8,7 @@ import interactionPlugin from '@fullcalendar/interaction';
 import { createClient } from '@/lib/supabase/client';
 import type { Agendamento } from '@/types/supabase';
 import AgendamentoForm from '@/components/agendamentos/AgendamentoForm';
+import { Plus } from 'lucide-react';
 
 // Helper de mapeamento de cores dos chips de status para o calendário
 const STATUS_COLORS: Record<string, string> = {
@@ -119,7 +120,7 @@ export default function AgendaCalendar() {
 
   return (
     <div className="h-full w-full custom-calendar-wrapper p-2 md:p-4 relative">
-      <div className="flex justify-between items-center mb-3 md:mb-4">
+      <div className="hidden md:flex justify-between items-center mb-3 md:mb-4">
         <button 
           onClick={() => {
             setSelectedEventId(undefined);
@@ -196,6 +197,20 @@ export default function AgendaCalendar() {
           </div>
         </div>
       )}
+
+      {/* Floating Action Button (FAB) no mobile */}
+      <button
+        onClick={() => {
+          setSelectedEventId(undefined);
+          setSelectedDate(undefined);
+          setIsModalOpen(true);
+        }}
+        className="md:hidden fixed bottom-20 right-4 z-40 w-14 h-14 bg-[#00D4FF] hover:bg-[#00A8CC] text-[#0D1B3E] rounded-xl flex items-center justify-center shadow-lg active:scale-95 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00D4FF]"
+        title="Novo Agendamento"
+        aria-label="Novo Agendamento"
+      >
+        <Plus size={24} strokeWidth={3} />
+      </button>
     </div>
   );
 }

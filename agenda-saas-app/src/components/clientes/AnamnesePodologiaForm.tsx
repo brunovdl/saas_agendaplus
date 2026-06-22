@@ -1716,7 +1716,7 @@ export default function AnamnesePodologiaForm({
                 <button
                   type="button"
                   onClick={clearCanvas}
-                  className="px-4 py-1.5 border border-slate-300 hover:bg-slate-50 text-slate-600 font-bold rounded-lg text-xs transition"
+                  className="btn-secondary px-4 py-1.5 text-xs"
                 >
                   Limpar Assinatura
                 </button>
@@ -1739,7 +1739,7 @@ export default function AnamnesePodologiaForm({
               if (prevAba) setActiveTab(prevAba);
             }
           }}
-          className="px-4 py-2 border border-slate-300 hover:bg-slate-50 disabled:opacity-40 disabled:hover:bg-transparent rounded-lg font-bold text-slate-600 transition"
+          className="btn-secondary px-4 py-2"
         >
           ← Voltar Aba
         </button>
@@ -1756,7 +1756,7 @@ export default function AnamnesePodologiaForm({
               handleSaveAll();
             }
           }}
-          className="px-5 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-lg font-bold transition"
+          className="btn-primary px-5 py-2"
         >
           {activeTab === 'assinatura' ? 'Salvar Ficha' : 'Próxima Aba →'}
         </button>

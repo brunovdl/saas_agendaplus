@@ -309,18 +309,7 @@ export default function OnboardingScreen({ nomeNegocio }: OnboardingScreenProps)
         <button
           onClick={handleSubmit}
           disabled={!selectedNicho || isPending}
-          style={{
-            padding: '14px 40px',
-            fontSize: '15px',
-            fontWeight: 700,
-            borderRadius: '8px',
-            background: selectedNicho ? '#00D4FF' : 'rgba(255, 255, 255, 0.05)',
-            color: selectedNicho ? '#020617' : 'rgba(255, 255, 255, 0.25)',
-            border: 'none',
-            cursor: selectedNicho && !isPending ? 'pointer' : 'not-allowed',
-            transition: 'all 0.2s ease',
-            boxShadow: selectedNicho ? '0 4px 18px rgba(0, 212, 255, 0.3)' : 'none',
-          }}
+          className="btn-accent px-10 py-3.5 text-[15px] disabled:opacity-40 disabled:cursor-not-allowed disabled:bg-white/[0.05] disabled:text-white/25 disabled:shadow-none"
         >
           {isPending ? 'Configurando...' : 'Confirmar e Começar'}
         </button>

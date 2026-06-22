@@ -247,7 +247,7 @@ export default function ConfiguracoesPage() {
           <button
             onClick={handleSave}
             disabled={isPending || !hasChanges}
-            className="px-6 py-2.5 bg-[#0D1B3E] text-white font-bold text-sm rounded-[6px] hover:bg-[#152448] transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+            className="btn-primary px-6 py-2.5 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isPending ? 'Salvando...' : 'Salvar Alterações'}
           </button>
@@ -260,7 +260,7 @@ export default function ConfiguracoesPage() {
         {/* ─── Conta ──────────────────────────────────────────────────────── */}
         <section>
           <h2 className="text-2xl font-bold text-[#0D1B3E] mb-4">Conta</h2>
-          <div className="bg-white rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.08)] overflow-hidden">
+          <div className="card overflow-hidden">
 
             {/* Avatar + Campos */}
             <div className="p-6 border-b border-[#C6C6CF]/30 flex items-start gap-6">
@@ -279,7 +279,7 @@ export default function ConfiguracoesPage() {
 
               <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block font-bold text-sm text-[#45464E] mb-1" htmlFor="full_name">
+                  <label htmlFor="full_name" className="label">
                     Nome Completo
                   </label>
                   <input
@@ -287,11 +287,11 @@ export default function ConfiguracoesPage() {
                     type="text"
                     value={profile.full_name}
                     onChange={(e) => setProfile((p) => ({ ...p, full_name: e.target.value }))}
-                    className="w-full px-3 py-2 border border-[#E8ECF0] rounded-[6px] text-sm text-[#181C1F] focus:outline-none focus:border-[#2563EB] focus:ring-1 focus:ring-[#2563EB] transition-colors bg-white"
+                    className="input"
                   />
                 </div>
                 <div>
-                  <label className="block font-bold text-sm text-[#45464E] mb-1" htmlFor="email">
+                  <label htmlFor="email" className="label">
                     Endereço de E-mail
                   </label>
                   <input
@@ -299,7 +299,7 @@ export default function ConfiguracoesPage() {
                     type="email"
                     value={profile.email}
                     readOnly
-                    className="w-full px-3 py-2 border border-[#E8ECF0] rounded-[6px] text-sm text-[#45464E] bg-[#F1F4F8] cursor-not-allowed"
+                    className="input bg-[#F1F4F8] cursor-not-allowed"
                   />
                 </div>
               </div>
@@ -314,7 +314,7 @@ export default function ConfiguracoesPage() {
                 </div>
                 <button
                   onClick={() => setIsChangingPassword(!isChangingPassword)}
-                  className="px-4 py-2 border-[1.5px] border-[#2563EB] text-[#2563EB] font-bold text-sm rounded-[6px] hover:bg-[#2563EB]/5 transition-colors"
+                  className="btn-outline px-4 py-2"
                 >
                   {isChangingPassword ? 'Cancelar' : 'Atualizar'}
                 </button>
@@ -323,7 +323,7 @@ export default function ConfiguracoesPage() {
               {isChangingPassword && (
                 <form onSubmit={handleUpdatePassword} className="mt-4 pt-4 border-t border-[#C6C6CF]/20 max-w-md space-y-4 animate-fade-in">
                   <div>
-                    <label className="block font-bold text-xs text-[#45464E] mb-1" htmlFor="new_password">
+                    <label htmlFor="new_password" className="label text-xs">
                       Nova Senha
                     </label>
                     <input
@@ -333,11 +333,11 @@ export default function ConfiguracoesPage() {
                       onChange={(e) => setNewPassword(e.target.value)}
                       placeholder="Mínimo 6 caracteres"
                       required
-                      className="w-full px-3 py-2 border border-[#E8ECF0] rounded-[6px] text-sm text-[#181C1F] focus:outline-none focus:border-[#2563EB] focus:ring-1 focus:ring-[#2563EB] transition-colors bg-white"
+                      className="input"
                     />
                   </div>
                   <div>
-                    <label className="block font-bold text-xs text-[#45464E] mb-1" htmlFor="confirm_password">
+                    <label htmlFor="confirm_password" className="label text-xs">
                       Confirmar Nova Senha
                     </label>
                     <input
@@ -347,7 +347,7 @@ export default function ConfiguracoesPage() {
                       onChange={(e) => setConfirmPassword(e.target.value)}
                       placeholder="Digite novamente"
                       required
-                      className="w-full px-3 py-2 border border-[#E8ECF0] rounded-[6px] text-sm text-[#181C1F] focus:outline-none focus:border-[#2563EB] focus:ring-1 focus:ring-[#2563EB] transition-colors bg-white"
+                      className="input"
                     />
                   </div>
                   {passwordError && (
@@ -360,7 +360,7 @@ export default function ConfiguracoesPage() {
                   )}
                   <button
                     type="submit"
-                    className="px-4 py-2 bg-[#0D1B3E] text-white font-bold text-xs rounded-[6px] hover:bg-[#152448] transition-colors"
+                    className="btn-primary px-4 py-2 text-xs"
                   >
                     Confirmar Alteração
                   </button>
@@ -377,7 +377,7 @@ export default function ConfiguracoesPage() {
                 </div>
                 <button
                   onClick={() => setIsDeletingAccount(!isDeletingAccount)}
-                  className="px-4 py-2 border-[1.5px] border-[#BA1A1A] text-[#BA1A1A] font-bold text-sm rounded-[6px] hover:bg-[#BA1A1A]/5 transition-colors"
+                  className="btn-outline-danger px-4 py-2"
                 >
                   {isDeletingAccount ? 'Cancelar' : 'Excluir'}
                 </button>
@@ -389,7 +389,7 @@ export default function ConfiguracoesPage() {
                     <strong>Atenção:</strong> Esta ação é irreversível. Todos os seus dados, incluindo agendamentos e clientes associados, serão permanentemente excluídos.
                   </div>
                   <div>
-                    <label className="block font-bold text-xs text-[#45464E] mb-1" htmlFor="confirm_delete">
+                    <label htmlFor="confirm_delete" className="label text-xs">
                       Digite <strong>EXCLUIR</strong> para confirmar:
                     </label>
                     <input
@@ -398,7 +398,7 @@ export default function ConfiguracoesPage() {
                       value={confirmDeleteText}
                       onChange={(e) => setConfirmDeleteText(e.target.value)}
                       placeholder="EXCLUIR"
-                      className="w-full px-3 py-2 border border-[#BA1A1A]/30 rounded-[6px] text-sm text-[#181C1F] focus:outline-none focus:border-[#BA1A1A] focus:ring-1 focus:ring-[#BA1A1A] transition-colors bg-white"
+                      className="input focus:border-[#BA1A1A] focus:ring-[#BA1A1A]/30"
                     />
                   </div>
                   {deleteError && (
@@ -420,7 +420,7 @@ export default function ConfiguracoesPage() {
         {/* ─── Notificações ───────────────────────────────────────────────── */}
         <section>
           <h2 className="text-2xl font-bold text-[#0D1B3E] mb-4">Notificações</h2>
-          <div className="bg-white rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.08)] overflow-hidden divide-y divide-[#C6C6CF]/30">
+          <div className="card overflow-hidden divide-y divide-[#C6C6CF]/30">
             {[
               {
                 id: 'email-digests',
@@ -478,7 +478,7 @@ export default function ConfiguracoesPage() {
           <h2 className="text-2xl font-bold text-[#0D1B3E] mb-4">Integrações</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* n8n — Webhook */}
-            <div className="bg-white rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.08)] p-5 border border-[#C6C6CF]/20 flex flex-col">
+            <div className="card p-5 border border-[#C6C6CF]/20 flex flex-col">
               <div className="flex justify-between items-start mb-3">
                 <div className="w-10 h-10 bg-[#EBEEF2] rounded-lg flex items-center justify-center border border-[#C6C6CF]/30">
                   <svg className="w-5 h-5 text-[#FF6D42]" viewBox="0 0 24 24" fill="currentColor">
@@ -494,7 +494,7 @@ export default function ConfiguracoesPage() {
               
               <div className="space-y-3 mt-2">
                 <div>
-                  <label htmlFor="webhook_url" className="block text-xs font-bold text-[#45464E] mb-1">
+                  <label htmlFor="webhook_url" className="label text-xs">
                     URL de Destino
                   </label>
                   <input
@@ -503,7 +503,7 @@ export default function ConfiguracoesPage() {
                     value={profile.webhook_url}
                     onChange={(e) => setProfile((p) => ({ ...p, webhook_url: e.target.value }))}
                     placeholder="https://seu-sistema.com/webhook/..."
-                    className="w-full px-3 py-2 border border-[#E8ECF0] rounded-[6px] text-xs text-[#181C1F] focus:outline-none focus:border-[#2563EB] focus:ring-1 focus:ring-[#2563EB] transition-colors bg-white"
+                    className="input text-xs"
                   />
                 </div>
                 {profile.webhook_url && !/^(https?:\/\/)/.test(profile.webhook_url) && (
@@ -515,7 +515,7 @@ export default function ConfiguracoesPage() {
                       onClick={handleTestWebhook}
                       disabled={isTestingWebhook}
                       type="button"
-                      className="w-full py-1.5 border border-[#2563EB] text-[#2563EB] rounded-[6px] font-bold text-xs hover:bg-[#2563EB]/5 transition-colors disabled:opacity-50"
+                      className="btn-outline w-full py-1.5 text-xs disabled:opacity-50"
                     >
                       {isTestingWebhook ? 'Testando...' : 'Testar Conexão'}
                     </button>
@@ -530,7 +530,7 @@ export default function ConfiguracoesPage() {
             </div>
 
             {/* WhatsApp (Secretária Virtual) */}
-            <div className="bg-white rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.08)] p-5 border border-[#C6C6CF]/20 flex flex-col">
+            <div className="card p-5 border border-[#C6C6CF]/20 flex flex-col">
               <div className="flex justify-between items-start mb-3">
                 <div className="w-10 h-10 bg-[#EBEEF2] rounded-lg flex items-center justify-center border border-[#C6C6CF]/30">
                   <svg className="w-5 h-5 text-[#25D366]" viewBox="0 0 24 24" fill="currentColor">
@@ -543,7 +543,7 @@ export default function ConfiguracoesPage() {
               <p className="text-xs text-[#45464E] flex-1 mb-4">Lembretes, confirmações e agendamentos automáticos gerenciados pela nossa assistente virtual de IA diretamente no WhatsApp.</p>
               <button 
                 onClick={() => router.push('/configuracoes/assistente')}
-                className="w-full py-2 bg-[#0D1B3E] text-white rounded-[6px] font-bold text-sm hover:bg-[#152448] transition-colors"
+                className="btn-primary w-full py-2"
               >
                 Configurar Assistente
               </button>
@@ -554,7 +554,7 @@ export default function ConfiguracoesPage() {
         {/* ─── Aparência ──────────────────────────────────────────────────── */}
         <section>
           <h2 className="text-2xl font-bold text-[#0D1B3E] mb-4">Aparência</h2>
-          <div className="bg-white rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.08)] overflow-hidden">
+          <div className="card overflow-hidden">
             {/* Tema */}
             <div className="p-5 border-b border-[#C6C6CF]/30">
               <h3 className="font-bold text-sm text-[#0D1B3E] mb-3">Tema Preferido</h3>
@@ -616,7 +616,7 @@ export default function ConfiguracoesPage() {
           <button
             onClick={handleSave}
             disabled={isPending || !hasChanges}
-            className="px-6 py-3 bg-[#0D1B3E] text-white font-bold text-sm rounded-[6px] hover:bg-[#152448] transition-colors shadow-sm disabled:opacity-50"
+            className="btn-primary px-6 py-3 shadow-sm disabled:opacity-50"
           >
             {isPending ? 'Salvando...' : 'Salvar Alterações'}
           </button>

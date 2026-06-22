@@ -122,6 +122,26 @@ body {
 .btn-outline:hover  { background-color: rgba(37, 99, 235, 0.06); }
 .btn-outline:focus-visible { outline: none; box-shadow: var(--shadow-focus); }
 
+/* Botão Secundário / Outline Neutro — Borda cinza */
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 9px 20px;
+  background-color: transparent;
+  color: var(--color-on-surface);
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 6px;
+  border: 1.5px solid var(--color-outline-variant);
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+.btn-secondary:hover  { background-color: rgba(13, 27, 62, 0.04); }
+.btn-secondary:focus-visible { outline: none; box-shadow: var(--shadow-focus); }
+.btn-secondary:disabled { opacity: 0.5; cursor: not-allowed; }
+
 /* Botão Outline Danger — Borda vermelha para ações destrutivas */
 .btn-outline-danger {
   display: inline-flex;

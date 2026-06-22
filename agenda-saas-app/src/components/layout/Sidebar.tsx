@@ -115,26 +115,11 @@ export default function Sidebar() {
         })}
       </nav>
 
-      {/* ─── Rodapé: Avatar + Automate Now ────────────────────────────── */}
+      {/* ─── Rodapé: Logout ───────────────────────────────────────────── */}
       <div
         className="mt-auto pt-5 flex flex-col gap-3"
         style={{ borderTop: '1px solid rgba(198,198,207,0.3)' }}
       >
-        {/* Botão Automate Now (Cyan) */}
-        <button
-          className="w-full flex items-center justify-center gap-2 py-2.5 font-bold text-sm rounded-lg transition-all"
-          style={{
-            background: '#00D4FF',
-            color: '#0D1B3E',
-            boxShadow: '0 2px 12px rgba(0,212,255,0.3)',
-          }}
-        >
-          <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M13 3L4 14h7l-1 7 9-11h-7l1-7z"/>
-          </svg>
-          Automate Now
-        </button>
-
         {/* Logout */}
         <button
           onClick={handleLogout}

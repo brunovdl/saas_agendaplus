@@ -158,7 +158,7 @@ export default function AgendamentoForm({ initialData, onSuccess, onCancel }: Ag
         <button type="submit" className="btn-primary flex-1" disabled={isPending}>
           {isPending ? 'Salvando...' : isEdit ? 'Salvar Alterações' : 'Criar Agendamento'}
         </button>
-        <button type="button" className="btn-outline flex-1" onClick={() => (onCancel ? onCancel() : router.back())} disabled={isPending}>
+        <button type="button" className="btn-secondary flex-1" onClick={() => (onCancel ? onCancel() : router.back())} disabled={isPending}>
           Cancelar
         </button>
       </div>

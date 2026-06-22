@@ -241,7 +241,7 @@ export default function ClientePerfilView({ dados, nicho }: ClientePerfilViewPro
     <>
       <div className="max-w-6xl mx-auto px-4 md:px-8 py-8 space-y-6 print:hidden">
       {/* ─── Cartão de Perfil do Cliente ──────────────────────────────────── */}
-      <div className="bg-white rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.06)] p-6 border border-[#C6C6CF]/20 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+      <div className="card p-6 border border-[#C6C6CF]/20 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
         <div className="flex items-center gap-5">
           <div className="w-16 h-16 rounded-full bg-[#E0E7FF] border border-blue-100 flex items-center justify-center text-[#2563EB] font-bold text-2xl shrink-0">
             {cliente.nome.charAt(0).toUpperCase()}
@@ -327,7 +327,7 @@ export default function ClientePerfilView({ dados, nicho }: ClientePerfilViewPro
 
       {/* ─── Conteúdo da Aba Geral: Agendamentos ──────────────────────────── */}
       {activeTab === 'geral' && (
-        <div className="bg-white rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.06)] border border-[#C6C6CF]/20 p-6">
+        <div className="card border border-[#C6C6CF]/20 p-6">
           <h3 className="text-lg font-bold text-[#0D1B3E] mb-4">Histórico de Agendamentos</h3>
           {agendamentos.length === 0 ? (
             <div className="text-center py-12 text-[#76767F]">
@@ -379,7 +379,7 @@ export default function ClientePerfilView({ dados, nicho }: ClientePerfilViewPro
 
       {/* ─── Conteúdo da Aba Saúde/Estética: Ficha de Anamnese ────────────────── */}
       {activeTab === 'nicho' && nicho === 'saude_estetica' && (
-        <form onSubmit={handleSaveAnamnese} className="bg-white rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.06)] border border-[#C6C6CF]/20 p-6 space-y-6">
+        <form onSubmit={handleSaveAnamnese} className="card border border-[#C6C6CF]/20 p-6 space-y-6">
           <div className="flex justify-between items-center border-b border-gray-100 pb-3 flex-wrap gap-4">
             <div>
               <h3 className="text-lg font-bold text-[#0D1B3E]">Ficha de Anamnese Clínica</h3>
@@ -419,7 +419,7 @@ export default function ClientePerfilView({ dados, nicho }: ClientePerfilViewPro
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block font-bold text-xs text-[#45464E] uppercase tracking-wider mb-1" htmlFor="alergias">
+              <label htmlFor="alergias" className="label text-xs uppercase tracking-wider">
                 Alergias / Sensibilidades
               </label>
               <textarea
@@ -428,12 +428,12 @@ export default function ClientePerfilView({ dados, nicho }: ClientePerfilViewPro
                 onChange={(e) => setAnamneseForm((p) => ({ ...p, alergias: e.target.value }))}
                 placeholder="Ex: Alergia a dipirona, látex..."
                 rows={3}
-                className="w-full px-3 py-2 border border-[#E8ECF0] rounded-[6px] text-sm text-[#181C1F] focus:outline-none focus:border-[#2563EB] focus:ring-1 focus:ring-[#2563EB] bg-white resize-y"
+                className="input resize-y"
               />
             </div>
 
             <div>
-              <label className="block font-bold text-xs text-[#45464E] uppercase tracking-wider mb-1" htmlFor="medicamentos">
+              <label htmlFor="medicamentos" className="label text-xs uppercase tracking-wider">
                 Medicamentos em Uso
               </label>
               <textarea
@@ -442,12 +442,12 @@ export default function ClientePerfilView({ dados, nicho }: ClientePerfilViewPro
                 onChange={(e) => setAnamneseForm((p) => ({ ...p, medicamentos: e.target.value }))}
                 placeholder="Medicamentos de uso contínuo..."
                 rows={3}
-                className="w-full px-3 py-2 border border-[#E8ECF0] rounded-[6px] text-sm text-[#181C1F] focus:outline-none focus:border-[#2563EB] focus:ring-1 focus:ring-[#2563EB] bg-white resize-y"
+                className="input resize-y"
               />
             </div>
 
             <div>
-              <label className="block font-bold text-xs text-[#45464E] uppercase tracking-wider mb-1" htmlFor="doencas_cronicas">
+              <label htmlFor="doencas_cronicas" className="label text-xs uppercase tracking-wider">
                 Doenças Crônicas / Condições Médicas
               </label>
               <textarea
@@ -456,12 +456,12 @@ export default function ClientePerfilView({ dados, nicho }: ClientePerfilViewPro
                 onChange={(e) => setAnamneseForm((p) => ({ ...p, doencas_cronicas: e.target.value }))}
                 placeholder="Ex: Hipertensão, Diabetes..."
                 rows={3}
-                className="w-full px-3 py-2 border border-[#E8ECF0] rounded-[6px] text-sm text-[#181C1F] focus:outline-none focus:border-[#2563EB] focus:ring-1 focus:ring-[#2563EB] bg-white resize-y"
+                className="input resize-y"
               />
             </div>
 
             <div>
-              <label className="block font-bold text-xs text-[#45464E] uppercase tracking-wider mb-1" htmlFor="queixa_principal">
+              <label htmlFor="queixa_principal" className="label text-xs uppercase tracking-wider">
                 Queixa Principal do Paciente
               </label>
               <textarea
@@ -470,13 +470,13 @@ export default function ClientePerfilView({ dados, nicho }: ClientePerfilViewPro
                 onChange={(e) => setAnamneseForm((p) => ({ ...p, queixa_principal: e.target.value }))}
                 placeholder="Motivo que levou o paciente ao atendimento..."
                 rows={3}
-                className="w-full px-3 py-2 border border-[#E8ECF0] rounded-[6px] text-sm text-[#181C1F] focus:outline-none focus:border-[#2563EB] focus:ring-1 focus:ring-[#2563EB] bg-white resize-y"
+                className="input resize-y"
               />
             </div>
           </div>
 
           <div>
-            <label className="block font-bold text-xs text-[#45464E] uppercase tracking-wider mb-1" htmlFor="observacoes_anamnese">
+            <label htmlFor="observacoes_anamnese" className="label text-xs uppercase tracking-wider">
               Observações Gerais de Evolução
             </label>
             <textarea
@@ -485,7 +485,7 @@ export default function ClientePerfilView({ dados, nicho }: ClientePerfilViewPro
               onChange={(e) => setAnamneseForm((p) => ({ ...p, observacoes: e.target.value }))}
               placeholder="Outras informações clínicas importantes..."
               rows={4}
-              className="w-full px-3 py-2 border border-[#E8ECF0] rounded-[6px] text-sm text-[#181C1F] focus:outline-none focus:border-[#2563EB] focus:ring-1 focus:ring-[#2563EB] bg-white resize-y"
+              className="input resize-y"
             />
           </div>
 
@@ -497,7 +497,7 @@ export default function ClientePerfilView({ dados, nicho }: ClientePerfilViewPro
             <button
               type="submit"
               disabled={isPending}
-              className="px-6 py-2.5 bg-[#0D1B3E] text-white font-bold text-sm rounded-[6px] hover:bg-[#152448] transition-colors shadow-sm disabled:opacity-50"
+              className="btn-primary px-6 py-2.5 shadow-sm disabled:opacity-50"
             >
               {isPending ? 'Salvando...' : 'Salvar Ficha'}
             </button>
@@ -520,7 +520,7 @@ export default function ClientePerfilView({ dados, nicho }: ClientePerfilViewPro
 
       {/* ─── Conteúdo da Aba Serviços: Histórico de Serviços ───────────────── */}
       {activeTab === 'nicho' && nicho === 'servicos_manutencao' && (
-        <div className="bg-white rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.06)] border border-[#C6C6CF]/20 p-6">
+        <div className="card border border-[#C6C6CF]/20 p-6">
           <div className="flex justify-between items-center mb-6">
             <div>
               <h3 className="text-lg font-bold text-[#0D1B3E]">Registros de Serviços Executados</h3>
@@ -528,7 +528,7 @@ export default function ClientePerfilView({ dados, nicho }: ClientePerfilViewPro
             </div>
             <button
               onClick={() => setIsServicoModalOpen(true)}
-              className="flex items-center gap-1.5 px-4 py-2 bg-[#0D1B3E] text-white font-bold text-sm rounded-[6px] hover:bg-[#152448] transition-colors"
+              className="btn-primary flex items-center gap-1.5 px-4 py-2"
             >
               <Plus size={16} />
               Registrar Serviço
@@ -582,7 +582,7 @@ export default function ClientePerfilView({ dados, nicho }: ClientePerfilViewPro
 
             <form onSubmit={handleUpdateCadastro} className="p-6 space-y-4">
               <div>
-                <label className="block font-bold text-xs text-[#45464E] uppercase tracking-wider mb-1" htmlFor="edit_nome">
+                <label htmlFor="edit_nome" className="label text-xs uppercase tracking-wider">
                   Nome Completo
                 </label>
                 <input
@@ -591,12 +591,12 @@ export default function ClientePerfilView({ dados, nicho }: ClientePerfilViewPro
                   required
                   value={cadastroForm.nome}
                   onChange={(e) => setCadastroForm((p) => ({ ...p, nome: e.target.value }))}
-                  className="w-full px-3 py-2 border border-[#E8ECF0] rounded-[6px] text-sm bg-white"
+                  className="input text-sm"
                 />
               </div>
 
               <div>
-                <label className="block font-bold text-xs text-[#45464E] uppercase tracking-wider mb-1" htmlFor="edit_telefone">
+                <label htmlFor="edit_telefone" className="label text-xs uppercase tracking-wider">
                   WhatsApp
                 </label>
                 <input
@@ -605,12 +605,12 @@ export default function ClientePerfilView({ dados, nicho }: ClientePerfilViewPro
                   required
                   value={cadastroForm.telefone}
                   onChange={(e) => setCadastroForm((p) => ({ ...p, telefone: e.target.value }))}
-                  className="w-full px-3 py-2 border border-[#E8ECF0] rounded-[6px] text-sm bg-white"
+                  className="input text-sm"
                 />
               </div>
 
               <div>
-                <label className="block font-bold text-xs text-[#45464E] uppercase tracking-wider mb-1" htmlFor="edit_email">
+                <label htmlFor="edit_email" className="label text-xs uppercase tracking-wider">
                   E-mail
                 </label>
                 <input
@@ -618,12 +618,12 @@ export default function ClientePerfilView({ dados, nicho }: ClientePerfilViewPro
                   type="email"
                   value={cadastroForm.email}
                   onChange={(e) => setCadastroForm((p) => ({ ...p, email: e.target.value }))}
-                  className="w-full px-3 py-2 border border-[#E8ECF0] rounded-[6px] text-sm bg-white"
+                  className="input text-sm"
                 />
               </div>
 
               <div>
-                <label className="block font-bold text-xs text-[#45464E] uppercase tracking-wider mb-1" htmlFor="edit_nascimento">
+                <label htmlFor="edit_nascimento" className="label text-xs uppercase tracking-wider">
                   Data de Nascimento
                 </label>
                 <input
@@ -631,7 +631,7 @@ export default function ClientePerfilView({ dados, nicho }: ClientePerfilViewPro
                   type="date"
                   value={cadastroForm.data_nascimento}
                   onChange={(e) => setCadastroForm((p) => ({ ...p, data_nascimento: e.target.value }))}
-                  className="w-full px-3 py-2 border border-[#E8ECF0] rounded-[6px] text-sm bg-white"
+                  className="input text-sm"
                 />
               </div>
 
@@ -643,14 +643,14 @@ export default function ClientePerfilView({ dados, nicho }: ClientePerfilViewPro
                 <button
                   type="button"
                   onClick={() => setIsEditModalOpen(false)}
-                  className="px-4 py-2 border border-gray-200 text-sm font-bold text-gray-600 rounded-[6px]"
+                  className="btn-secondary px-4 py-2 text-sm"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
                   disabled={isPending}
-                  className="px-5 py-2 bg-[#0D1B3E] text-white font-bold text-sm rounded-[6px] disabled:opacity-50"
+                  className="btn-primary px-5 py-2 text-sm disabled:opacity-50"
                 >
                   {isPending ? 'Salvando...' : 'Salvar'}
                 </button>
@@ -673,7 +673,7 @@ export default function ClientePerfilView({ dados, nicho }: ClientePerfilViewPro
 
             <form onSubmit={handleAddServico} className="p-6 space-y-4">
               <div>
-                <label className="block font-bold text-xs text-[#45464E] uppercase tracking-wider mb-1" htmlFor="serv_data">
+                <label htmlFor="serv_data" className="label text-xs uppercase tracking-wider">
                   Data do Serviço
                 </label>
                 <input
@@ -682,12 +682,12 @@ export default function ClientePerfilView({ dados, nicho }: ClientePerfilViewPro
                   required
                   value={servicoForm.data_servico}
                   onChange={(e) => setServicoForm((p) => ({ ...p, data_servico: e.target.value }))}
-                  className="w-full px-3 py-2 border border-[#E8ECF0] rounded-[6px] text-sm bg-white"
+                  className="input text-sm"
                 />
               </div>
 
               <div>
-                <label className="block font-bold text-xs text-[#45464E] uppercase tracking-wider mb-1" htmlFor="serv_desc">
+                <label htmlFor="serv_desc" className="label text-xs uppercase tracking-wider">
                   Descrição do Serviço / Peças
                 </label>
                 <input
@@ -697,12 +697,12 @@ export default function ClientePerfilView({ dados, nicho }: ClientePerfilViewPro
                   value={servicoForm.descricao}
                   onChange={(e) => setServicoForm((p) => ({ ...p, descricao: e.target.value }))}
                   placeholder="Ex: Troca de óleo, pastilhas e alinhamento"
-                  className="w-full px-3 py-2 border border-[#E8ECF0] rounded-[6px] text-sm bg-white"
+                  className="input text-sm"
                 />
               </div>
 
               <div>
-                <label className="block font-bold text-xs text-[#45464E] uppercase tracking-wider mb-1" htmlFor="serv_valor">
+                <label htmlFor="serv_valor" className="label text-xs uppercase tracking-wider">
                   Valor Cobrado (R$)
                 </label>
                 <input
@@ -713,12 +713,12 @@ export default function ClientePerfilView({ dados, nicho }: ClientePerfilViewPro
                   value={servicoForm.valor}
                   onChange={(e) => setServicoForm((p) => ({ ...p, valor: e.target.value }))}
                   placeholder="0,00"
-                  className="w-full px-3 py-2 border border-[#E8ECF0] rounded-[6px] text-sm bg-white"
+                  className="input text-sm"
                 />
               </div>
 
               <div>
-                <label className="block font-bold text-xs text-[#45464E] uppercase tracking-wider mb-1" htmlFor="serv_obs">
+                <label htmlFor="serv_obs" className="label text-xs uppercase tracking-wider">
                   Observações do Técnico
                 </label>
                 <textarea
@@ -727,7 +727,7 @@ export default function ClientePerfilView({ dados, nicho }: ClientePerfilViewPro
                   onChange={(e) => setServicoForm((p) => ({ ...p, observacoes: e.target.value }))}
                   placeholder="Detalhes adicionais ou recomendações..."
                   rows={3}
-                  className="w-full px-3 py-2 border border-[#E8ECF0] rounded-[6px] text-sm bg-white resize-y"
+                  className="input text-sm resize-y"
                 />
               </div>
 
@@ -739,14 +739,14 @@ export default function ClientePerfilView({ dados, nicho }: ClientePerfilViewPro
                 <button
                   type="button"
                   onClick={() => setIsServicoModalOpen(false)}
-                  className="px-4 py-2 border border-gray-200 text-sm font-bold text-gray-600 rounded-[6px]"
+                  className="btn-secondary px-4 py-2 text-sm"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
                   disabled={isPending}
-                  className="px-5 py-2 bg-[#0D1B3E] text-white font-bold text-sm rounded-[6px] disabled:opacity-50"
+                  className="btn-primary px-5 py-2 text-sm disabled:opacity-50"
                 >
                   {isPending ? 'Salvando...' : 'Salvar Registro'}
                 </button>
