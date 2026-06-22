@@ -11,9 +11,10 @@ interface AgendamentoFormProps {
   initialData?: Partial<AgendamentoFormData> & { id?: string };
   onSuccess?: () => void;
   onCancel?: () => void;
+  readOnly?: boolean;
 }
 
-export default function AgendamentoForm({ initialData, onSuccess, onCancel }: AgendamentoFormProps) {
+export default function AgendamentoForm({ initialData, onSuccess, onCancel, readOnly = false }: AgendamentoFormProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [serverError, setServerError] = useState<string | null>(null);
@@ -95,13 +96,13 @@ export default function AgendamentoForm({ initialData, onSuccess, onCancel }: Ag
 
       <div>
         <label className="label">Nome do Cliente</label>
-        <input className="input" {...register('cliente_nome')} placeholder="Ex: João Silva" />
+        <input className="input" {...register('cliente_nome')} placeholder="Ex: João Silva" disabled={readOnly} />
         {errors.cliente_nome && <p className="error-msg">{errors.cliente_nome.message}</p>}
       </div>
 
       <div>
         <label className="label">WhatsApp</label>
-        <input className="input" type="tel" {...register('cliente_telefone')} placeholder="(11) 99999-9999" />
+        <input className="input" type="tel" {...register('cliente_telefone')} placeholder="(11) 99999-9999" disabled={readOnly} />
         {errors.cliente_telefone && <p className="error-msg">{errors.cliente_telefone.message}</p>}
       </div>
 
@@ -112,6 +113,7 @@ export default function AgendamentoForm({ initialData, onSuccess, onCancel }: Ag
             className="input" 
             type="date" 
             {...register('data_agendamento')} 
+            disabled={readOnly}
           />
           {errors.data_agendamento && <p className="error-msg">{errors.data_agendamento.message}</p>}
         </div>
@@ -122,6 +124,7 @@ export default function AgendamentoForm({ initialData, onSuccess, onCancel }: Ag
             className="input" 
             type="time" 
             {...register('hora_inicio')} 
+            disabled={readOnly}
           />
           {errors.hora_inicio && <p className="error-msg">{errors.hora_inicio.message}</p>}
         </div>
@@ -132,6 +135,7 @@ export default function AgendamentoForm({ initialData, onSuccess, onCancel }: Ag
             className="input" 
             type="time" 
             {...register('hora_fim')} 
+            disabled={readOnly}
           />
           {errors.hora_fim && <p className="error-msg">{errors.hora_fim.message}</p>}
         </div>
@@ -139,7 +143,7 @@ export default function AgendamentoForm({ initialData, onSuccess, onCancel }: Ag
 
       <div>
         <label className="label">Status</label>
-        <select className="input" {...register('status')}>
+        <select className="input" {...register('status')} disabled={readOnly}>
           <option value="pendente">Pendente</option>
           <option value="confirmado">Confirmado</option>
           <option value="remarcado">Remarcado</option>
@@ -150,16 +154,18 @@ export default function AgendamentoForm({ initialData, onSuccess, onCancel }: Ag
 
       <div>
         <label className="label">Observações</label>
-        <textarea className="input" rows={3} {...register('observacoes')} placeholder="Descrição do serviço" />
+        <textarea className="input" rows={3} {...register('observacoes')} placeholder="Descrição do serviço" disabled={readOnly} />
         {errors.observacoes && <p className="error-msg">{errors.observacoes.message}</p>}
       </div>
 
       <div className="flex flex-col sm:flex-row gap-3 mt-2">
-        <button type="submit" className="btn-primary flex-1" disabled={isPending}>
-          {isPending ? 'Salvando...' : isEdit ? 'Salvar Alterações' : 'Criar Agendamento'}
-        </button>
+        {!readOnly && (
+          <button type="submit" className="btn-primary flex-1" disabled={isPending}>
+            {isPending ? 'Salvando...' : isEdit ? 'Salvar Alterações' : 'Criar Agendamento'}
+          </button>
+        )}
         <button type="button" className="btn-secondary flex-1" onClick={() => (onCancel ? onCancel() : router.back())} disabled={isPending}>
-          Cancelar
+          {readOnly ? 'Fechar' : 'Cancelar'}
         </button>
       </div>
     </form>

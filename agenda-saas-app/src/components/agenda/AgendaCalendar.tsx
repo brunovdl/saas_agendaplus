@@ -99,8 +99,10 @@ export default function AgendaCalendar() {
   const selectedAgendamento = selectedEventId ? agendamentos.find(a => a.id === selectedEventId) : undefined;
 
   const handleDateClick = (arg: { dateStr: string }) => {
-    // Para simplificar a Fase 4, alertamos. Na Fase 5/futuro abrirá o Modal de Criação!
-    // Você clicou no horário: arg.dateStr
+    // Impede a criação de agendamentos no passado
+    if (new Date(arg.dateStr) < new Date()) {
+      return;
+    }
     setSelectedEventId(undefined);
     setSelectedDate(arg.dateStr); // Ex: "2026-10-04T09:00:00-03:00"
     setIsModalOpen(true);
@@ -134,6 +136,7 @@ export default function AgendaCalendar() {
           dateClick={handleDateClick}
           eventClick={handleEventClick}
           height="100%"
+          nowIndicator={true}
           slotMinTime="07:00:00"
           slotMaxTime="22:00:00"
           allDaySlot={false}
@@ -154,7 +157,11 @@ export default function AgendaCalendar() {
             {/* Header */}
             <div className="px-6 py-4 border-b border-[#C6C6CF]/20 flex justify-between items-center bg-[#F8FAFC]">
               <h3 className="font-bold text-lg text-[#0D1B3E]">
-                {selectedEventId ? 'Editar Agendamento' : 'Novo Agendamento'}
+                {selectedEventId 
+                  ? (selectedAgendamento && new Date(selectedAgendamento.data_hora_fim) < new Date() 
+                      ? 'Consultar Agendamento' 
+                      : 'Editar Agendamento') 
+                  : 'Novo Agendamento'}
               </h3>
               <button
                 onClick={handleModalClose}
@@ -176,6 +183,7 @@ export default function AgendaCalendar() {
                 }
                 onSuccess={handleModalClose}
                 onCancel={handleModalClose}
+                readOnly={selectedAgendamento ? new Date(selectedAgendamento.data_hora_fim) < new Date() : false}
               />
             </div>
           </div>
