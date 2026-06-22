@@ -11,23 +11,16 @@ export default function AgendamentosPage() {
           <h1 className="text-2xl md:text-3xl font-bold text-[#181C1F]">Meus Agendamentos</h1>
           <p className="text-sm text-[#45464E] mt-1">Gerencie seus clientes e horários de forma simples.</p>
         </div>
-        <Link 
-          href="/agendamentos/novo" 
-          className="hidden md:inline-flex btn-primary whitespace-nowrap self-start sm:self-auto" 
-          style={{ textDecoration: 'none' }}
-        >
-          + Novo Agendamento
-        </Link>
       </div>
 
       <Suspense fallback={<div className="text-center py-12 text-[#76767F]">Carregando agendamentos...</div>}>
         <AgendamentoList />
       </Suspense>
 
-      {/* Floating Action Button (FAB) no mobile para direcionar para novo agendamento */}
+      {/* Floating Action Button (FAB) / Widget flutuante para criar novo agendamento */}
       <Link
         href="/agendamentos/novo"
-        className="md:hidden fixed bottom-20 right-4 z-40 w-14 h-14 bg-[#00D4FF] hover:bg-[#00A8CC] text-[#0D1B3E] rounded-xl flex items-center justify-center shadow-lg active:scale-95 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00D4FF]"
+        className="fixed bottom-20 md:bottom-8 right-4 md:right-8 z-40 w-14 h-14 bg-[#00D4FF] hover:bg-[#00A8CC] text-[#0D1B3E] rounded-xl flex items-center justify-center shadow-lg active:scale-95 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00D4FF]"
         title="Novo Agendamento"
         aria-label="Novo Agendamento"
         style={{ textDecoration: 'none' }}
