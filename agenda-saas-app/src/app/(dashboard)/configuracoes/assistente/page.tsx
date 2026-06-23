@@ -38,6 +38,7 @@ interface ConfiguracaoAssistente {
   tom_voz: string;
   horario_funcionamento: HorarioFuncionamento;
   servicos: Servico[];
+  descricao_negocio?: string;
 }
 
 const DIAS_SEMANA_MAP: Record<keyof HorarioFuncionamento, string> = {
@@ -53,6 +54,7 @@ const DIAS_SEMANA_MAP: Record<keyof HorarioFuncionamento, string> = {
 const DEFAULT_CONFIG: ConfiguracaoAssistente = {
   nome_assistente: 'Assistente Virtual',
   tom_voz: 'profissional',
+  descricao_negocio: '',
   horario_funcionamento: {
     segunda: { inicio: '09:00', fim: '18:00', ativo: true },
     terca: { inicio: '09:00', fim: '18:00', ativo: true },
@@ -72,6 +74,8 @@ export default function AssistenteConfigPage() {
 
   const [config, setConfig] = useState<ConfiguracaoAssistente>(DEFAULT_CONFIG);
   const [originalConfig, setOriginalConfig] = useState<ConfiguracaoAssistente | null>(null);
+  const [nomeNegocio, setNomeNegocio] = useState('');
+  const [originalNomeNegocio, setOriginalNomeNegocio] = useState('');
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
 
@@ -97,7 +101,7 @@ export default function AssistenteConfigPage() {
 
       const { data, error } = await supabase
         .from('prestadores')
-        .select('configuracao_assistente, whatsapp_status, whatsapp_numero, subscription_tier')
+        .select('nome_negocio, configuracao_assistente, whatsapp_status, whatsapp_numero, subscription_tier')
         .eq('id', user.id)
         .single();
 
@@ -105,6 +109,8 @@ export default function AssistenteConfigPage() {
         setWhatsappStatus(data.whatsapp_status || 'disconnected');
         setWhatsappNumero(data.whatsapp_numero || null);
         setSubscriptionTier(data.subscription_tier || 'free_trial');
+        setNomeNegocio(data.nome_negocio || '');
+        setOriginalNomeNegocio(data.nome_negocio || '');
 
         if (data.configuracao_assistente) {
           const loadedConfig = data.configuracao_assistente as unknown as ConfiguracaoAssistente;
@@ -113,6 +119,7 @@ export default function AssistenteConfigPage() {
           const mergedConfig: ConfiguracaoAssistente = {
             nome_assistente: loadedConfig.nome_assistente ?? DEFAULT_CONFIG.nome_assistente,
             tom_voz: loadedConfig.tom_voz ?? DEFAULT_CONFIG.tom_voz,
+            descricao_negocio: loadedConfig.descricao_negocio ?? DEFAULT_CONFIG.descricao_negocio,
             horario_funcionamento: {
               ...DEFAULT_CONFIG.horario_funcionamento,
               ...(loadedConfig.horario_funcionamento ?? {}),
@@ -203,6 +210,7 @@ export default function AssistenteConfigPage() {
       const { error } = await supabase
         .from('prestadores')
         .update({
+          nome_negocio: nomeNegocio,
           configuracao_assistente: config as any,
         })
         .eq('id', user.id);
@@ -211,6 +219,7 @@ export default function AssistenteConfigPage() {
         setSaveError('Erro ao salvar as configurações do assistente. Tente novamente.');
       } else {
         setOriginalConfig(config);
+        setOriginalNomeNegocio(nomeNegocio);
         setSaveSuccess(true);
         setTimeout(() => setSaveSuccess(false), 3000);
       }
@@ -292,7 +301,7 @@ export default function AssistenteConfigPage() {
     }));
   };
 
-  const hasChanges = originalConfig ? JSON.stringify(config) !== JSON.stringify(originalConfig) : false;
+  const hasChanges = (originalConfig ? JSON.stringify(config) !== JSON.stringify(originalConfig) : false) || nomeNegocio !== originalNomeNegocio;
 
   if (subscriptionTier === 'normal') {
     return (
@@ -505,36 +514,79 @@ export default function AssistenteConfigPage() {
           <h3 className="text-lg font-bold text-[#0D1B3E] mb-1">Personalidade do Assistente</h3>
           <p className="text-xs text-[#45464E] mb-6">Defina como a inteligência artificial se apresentará aos clientes no WhatsApp.</p>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block font-bold text-sm text-[#45464E] mb-2" htmlFor="nome_assistente">
+                  Nome do Assistente (Ex: Carolina, Roberto)
+                </label>
+                <input
+                  id="nome_assistente"
+                  type="text"
+                  value={config.nome_assistente}
+                  onChange={(e) => setConfig((prev) => ({ ...prev, nome_assistente: e.target.value }))}
+                  className="w-full px-3 py-2 border border-[#E8ECF0] rounded-[6px] text-sm text-[#181C1F] focus:outline-none focus:border-[#2563EB] focus:ring-1 focus:ring-[#2563EB] transition-colors bg-white"
+                  placeholder="Ex: Secretária Virtual"
+                />
+              </div>
+
+              <div>
+                <label className="block font-bold text-sm text-[#45464E] mb-2" htmlFor="tom_voz">
+                  Tom de Voz das Mensagens
+                </label>
+                <select
+                  id="tom_voz"
+                  value={config.tom_voz}
+                  onChange={(e) => setConfig((prev) => ({ ...prev, tom_voz: e.target.value }))}
+                  className="w-full px-3 py-2 border border-[#E8ECF0] rounded-[6px] text-sm text-[#181C1F] focus:outline-none focus:border-[#2563EB] focus:ring-1 focus:ring-[#2563EB] transition-colors bg-white"
+                >
+                  <option value="profissional">Profissional e Polido (Recomendado)</option>
+                  <option value="amigavel">Amigável e Descontraído</option>
+                  <option value="direto">Direto e Objetivo</option>
+                  <option value="carismatico">Carismático e Acolhedor</option>
+                </select>
+              </div>
+            </div>
+
             <div>
-              <label className="block font-bold text-sm text-[#45464E] mb-2" htmlFor="nome_assistente">
-                Nome do Assistente (Ex: Carolina, Roberto)
+              <label className="block font-bold text-sm text-[#45464E] mb-2" htmlFor="nome_negocio">
+                Nome do Negócio
               </label>
               <input
-                id="nome_assistente"
+                id="nome_negocio"
                 type="text"
-                value={config.nome_assistente}
-                onChange={(e) => setConfig((prev) => ({ ...prev, nome_assistente: e.target.value }))}
+                value={nomeNegocio}
+                onChange={(e) => setNomeNegocio(e.target.value)}
                 className="w-full px-3 py-2 border border-[#E8ECF0] rounded-[6px] text-sm text-[#181C1F] focus:outline-none focus:border-[#2563EB] focus:ring-1 focus:ring-[#2563EB] transition-colors bg-white"
-                placeholder="Ex: Secretária Virtual"
+                placeholder="Ex: Barbearia Estilo, Clínica Sorriso"
               />
             </div>
 
             <div>
-              <label className="block font-bold text-sm text-[#45464E] mb-2" htmlFor="tom_voz">
-                Tom de Voz das Mensagens
-              </label>
-              <select
-                id="tom_voz"
-                value={config.tom_voz}
-                onChange={(e) => setConfig((prev) => ({ ...prev, tom_voz: e.target.value }))}
-                className="w-full px-3 py-2 border border-[#E8ECF0] rounded-[6px] text-sm text-[#181C1F] focus:outline-none focus:border-[#2563EB] focus:ring-1 focus:ring-[#2563EB] transition-colors bg-white"
-              >
-                <option value="profissional">Profissional e Polido (Recomendado)</option>
-                <option value="amigavel">Amigável e Descontraído</option>
-                <option value="direto">Direto e Objetivo</option>
-                <option value="carismatico">Carismático e Acolhedor</option>
-              </select>
+              <div className="flex justify-between items-center mb-2">
+                <label className="block font-bold text-sm text-[#45464E]" htmlFor="descricao_negocio">
+                  Descrição do Negócio
+                </label>
+                <span className={`text-xs font-semibold ${
+                  (config.descricao_negocio || '').length > 900 ? 'text-[#BA1A1A]' : 'text-[#76767F]'
+                }`}>
+                  {(config.descricao_negocio || '').length}/1000
+                </span>
+              </div>
+              <textarea
+                id="descricao_negocio"
+                value={config.descricao_negocio || ''}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  if (val.length <= 1000) {
+                    setConfig((prev) => ({ ...prev, descricao_negocio: val }));
+                  }
+                }}
+                rows={5}
+                className="w-full px-3 py-2 border border-[#E8ECF0] rounded-[6px] text-sm text-[#181C1F] focus:outline-none focus:border-[#2563EB] focus:ring-1 focus:ring-[#2563EB] transition-colors bg-white resize-y"
+                placeholder="Descreva sobre o seu negócio, os serviços prestados, a localização ou regras específicas para a assistente saber como responder aos clientes..."
+                maxLength={1000}
+              />
             </div>
           </div>
         </section>

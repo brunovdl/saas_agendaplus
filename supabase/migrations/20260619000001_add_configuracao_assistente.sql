@@ -12,5 +12,6 @@ ADD COLUMN IF NOT EXISTS configuracao_assistente JSONB DEFAULT '{
   },
   "servicos": [],
   "nome_assistente": "Assistente Virtual",
-  "tom_voz": "profissional"
+  "tom_voz": "profissional",
+  "descricao_negocio": ""
 }'::jsonb;
