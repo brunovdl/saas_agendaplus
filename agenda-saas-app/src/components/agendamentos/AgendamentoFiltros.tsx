@@ -73,7 +73,15 @@ export default function AgendamentoFiltros() {
 
   // Sincroniza o estado do input se o parâmetro de busca for limpo externamente
   useEffect(() => {
-    setNome(searchParams.get('nome') || '');
+    const externalNome = searchParams.get('nome') || '';
+    // Guard: só atualiza se o valor externo mudou (evita cascading render ao digitar)
+    if (externalNome !== nome) {
+      const timer = setTimeout(() => {
+        setNome(externalNome);
+      }, 0);
+      return () => clearTimeout(timer);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
   const handleLimparFiltros = () => {

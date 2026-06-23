@@ -22,8 +22,9 @@ export async function POST(req: Request) {
 
   try {
     event = stripe.webhooks.constructEvent(payload, signature, webhookSecret);
-  } catch (err: any) {
-    console.error(`[Stripe Webhook Error] Assinatura inválida: ${err.message}`);
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : 'Assinatura inválida.';
+    console.error(`[Stripe Webhook Error] Assinatura inválida: ${msg}`);
     return NextResponse.json({ error: 'Assinatura inválida.' }, { status: 400 });
   }
 
@@ -56,6 +57,7 @@ export async function POST(req: Request) {
       case 'customer.subscription.created':
       case 'customer.subscription.updated':
       case 'customer.subscription.deleted': {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const subscription = event.data.object as any;
         const stripeCustomerId = subscription.customer as string;
         const stripeSubscriptionId = subscription.id;
@@ -80,6 +82,7 @@ export async function POST(req: Request) {
           : null;
 
         // Atualiza os dados de acesso do prestador buscando pelo stripe_customer_id ou stripe_subscription_id
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const updateData: any = {
           subscription_status: status,
           subscription_tier: status === 'canceled' ? 'free_trial' : tier,
@@ -116,7 +119,7 @@ export async function POST(req: Request) {
 
       // 3. Falha de pagamento
       case 'invoice.payment_failed': {
-        const invoice = event.data.object as any;
+        const invoice = event.data.object as Stripe.Invoice;
         const stripeCustomerId = invoice.customer as string;
 
         // Marca como inadimplente (past_due)
@@ -138,8 +141,9 @@ export async function POST(req: Request) {
     }
 
     return NextResponse.json({ received: true });
-  } catch (err: any) {
-    console.error(`[Stripe Webhook Processing Error] ${err.message}`);
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : 'Erro desconhecido';
+    console.error(`[Stripe Webhook Processing Error] ${msg}`);
     return NextResponse.json({ error: 'Erro no processamento do webhook.' }, { status: 500 });
   }
 }

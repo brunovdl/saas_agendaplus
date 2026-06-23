@@ -189,6 +189,12 @@ export default function ConfiguracoesPage() {
     window.location.href = '/';
   };
 
+  // ─── Logout ───────────────────────────────────────────────────────────────
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    window.location.href = '/';
+  };
+
   // ─── Testar Webhook ───────────────────────────────────────────────────────
   const handleTestWebhook = async () => {
     if (!profile.webhook_url) return;
@@ -207,8 +213,9 @@ export default function ConfiguracoesPage() {
       } else {
         setTestResult({ success: false, msg: `Falha na conexão: HTTP ${res.status}` });
       }
-    } catch (err: any) {
-      setTestResult({ success: false, msg: `Erro de rede: ${err.message || 'não foi possível alcançar a URL'}` });
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'não foi possível alcançar a URL';
+      setTestResult({ success: false, msg: `Erro de rede: ${msg}` });
     } finally {
       setIsTestingWebhook(false);
     }
@@ -226,6 +233,22 @@ export default function ConfiguracoesPage() {
 
   return (
     <div className="flex-1 overflow-y-auto w-full">
+      {/* ─── Header Mobile com Sair ───────────────────────────────────────── */}
+      <div className="md:hidden px-4 py-4 flex justify-between items-center border-b border-[#C6C6CF]/20 bg-white sticky top-0 z-20 shadow-nav">
+        <h1 className="text-xl font-bold text-[#0D1B3E]">Configurações</h1>
+        <button
+          onClick={handleLogout}
+          className="px-3 py-1.5 border border-[#C6C6CF] text-xs font-bold text-[#45464E] rounded-md flex items-center gap-1.5 hover:bg-gray-50 active:bg-gray-100 transition-colors"
+        >
+          <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+            <polyline points="16 17 21 12 16 7"/>
+            <line x1="21" y1="12" x2="9" y2="12"/>
+          </svg>
+          Sair
+        </button>
+      </div>
+
       {/* ─── Header ───────────────────────────────────────────────────────── */}
       <header className="hidden md:flex justify-between items-center px-8 py-6 border-b border-[#C6C6CF]/20 bg-white sticky top-0 z-20 shadow-sm">
         <div>

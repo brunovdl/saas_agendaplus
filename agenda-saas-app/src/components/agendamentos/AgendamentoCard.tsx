@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import type { Agendamento } from '@/types/supabase';
-import { cancelarAgendamento } from '@/app/(dashboard)/agendamentos/actions';
-import { MessageCircle, Pencil, Calendar, Ban } from 'lucide-react';
+import { cancelarAgendamento, concluirAgendamento } from '@/app/(dashboard)/agendamentos/actions';
+import { MessageCircle, Pencil, Calendar, Ban, Check } from 'lucide-react';
 
 interface AgendamentoCardProps {
   agendamento: Agendamento;
@@ -9,10 +9,16 @@ interface AgendamentoCardProps {
 
 export default function AgendamentoCard({ agendamento }: AgendamentoCardProps) {
   const isCancelado = agendamento.status === 'cancelado';
+  const isConcluido = agendamento.status === 'concluido';
 
   async function handleCancel() {
     'use server';
     await cancelarAgendamento(agendamento.id);
+  }
+
+  async function handleConcluir() {
+    'use server';
+    await concluirAgendamento(agendamento.id);
   }
 
   const formatHora = (isoStr: string) => {
@@ -114,8 +120,23 @@ export default function AgendamentoCard({ agendamento }: AgendamentoCardProps) {
           <Calendar size={18} strokeWidth={2} />
         </Link>
 
-        {/* Cancelar (Apenas se o agendamento não estiver cancelado) */}
-        {!isCancelado && (
+        {/* Concluir (Apenas se o agendamento não estiver cancelado ou concluído) */}
+        {!isCancelado && !isConcluido && (
+          <form action={handleConcluir} className="flex-1 flex">
+            <button
+              id={`btn-concluir-${agendamento.id}`}
+              type="submit"
+              className="w-full py-2 flex items-center justify-center border-[1.5px] border-emerald-600 text-emerald-600 hover:bg-emerald-50 rounded-md transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00D4FF]"
+              title="Concluir agendamento"
+              aria-label="Concluir agendamento"
+            >
+              <Check size={18} strokeWidth={2} />
+            </button>
+          </form>
+        )}
+
+        {/* Cancelar (Apenas se o agendamento não estiver cancelado ou concluído) */}
+        {!isCancelado && !isConcluido && (
           <form action={handleCancel} className="flex-1 flex">
             <button
               id={`btn-cancelar-${agendamento.id}`}

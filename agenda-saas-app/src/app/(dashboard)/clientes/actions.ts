@@ -10,6 +10,7 @@ import {
   type HistoricoServicoFormData 
 } from '@/lib/validations/cliente';
 import { revalidatePath } from 'next/cache';
+import type { Json } from '@/types/supabase';
 
 // ─── Atualizar o nicho do prestador (Onboarding) ──────────────────────────
 export async function saveNichoPrestador(nicho: 'saude_estetica' | 'servicos_manutencao' | 'podologia') {
@@ -265,7 +266,7 @@ export async function saveAnamnese(clienteId: string, data: AnamneseFormData) {
 }
 
 // ─── Salvar/Atualizar Ficha de Anamnese de Podologia ───────────────────────
-export async function saveAnamnesePodologia(clienteId: string, dados: any) {
+export async function saveAnamnesePodologia(clienteId: string, dados: Json) {
   const supabase = await createClient();
   const { data: authData } = await supabase.auth.getUser();
   if (!authData.user) {

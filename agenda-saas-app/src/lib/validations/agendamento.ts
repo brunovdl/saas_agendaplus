@@ -51,7 +51,7 @@ export const BaseAgendamentoSchema = z.object({
       .string({ error: 'Data/hora de fim é obrigatória' })
       .min(1, 'Data/hora de fim é obrigatória'),
 
-    status: z.enum(['pendente', 'confirmado', 'cancelado', 'remarcado'], {
+    status: z.enum(['pendente', 'confirmado', 'cancelado', 'remarcado', 'concluido'], {
       error: 'Status inválido',
     }),
 
@@ -116,6 +116,27 @@ export const FormAgendamentoSchema = z.object({
 
 export type FormAgendamentoData = z.infer<typeof FormAgendamentoSchema>;
 
+export const FormEditarAgendamentoSchema = z.object({
+  cliente_nome: BaseAgendamentoSchema.shape.cliente_nome,
+  cliente_telefone: BaseAgendamentoSchema.shape.cliente_telefone,
+  data_agendamento: z.string().min(1, 'A data é obrigatória').regex(/^\d{4}-\d{2}-\d{2}$/, 'Data inválida'),
+  hora_inicio: z.string().min(1, 'O horário de início é obrigatório').regex(/^\d{2}:\d{2}$/, 'Horário inválido'),
+  hora_fim: z.string().min(1, 'O horário de término é obrigatório').regex(/^\d{2}:\d{2}$/, 'Horário inválido'),
+  status: BaseAgendamentoSchema.shape.status,
+  observacoes: BaseAgendamentoSchema.shape.observacoes,
+}).refine(
+  (data) => {
+    if (!data.data_agendamento || !data.hora_inicio || !data.hora_fim) return true;
+    const inicio = new Date(`${data.data_agendamento}T${data.hora_inicio}`);
+    const fim = new Date(`${data.data_agendamento}T${data.hora_fim}`);
+    return inicio < fim;
+  },
+  {
+    message: 'O horário de início deve ser anterior ao horário de fim',
+    path: ['hora_fim'],
+  }
+);
+
 /**
  * Schema para atualização parcial (todos os campos opcionais exceto id).
  */
@@ -126,7 +147,7 @@ export type AgendamentoUpdateData = z.infer<typeof AgendamentoUpdateSchema>;
  * Schema de filtros para listagem de agendamentos.
  */
 export const AgendamentoFiltrosSchema = z.object({
-  status: z.enum(['pendente', 'confirmado', 'cancelado', 'remarcado']).optional(),
+  status: z.enum(['pendente', 'confirmado', 'cancelado', 'remarcado', 'concluido']).optional(),
   data_inicio: z.string().date().optional(),
   data_fim: z.string().date().optional(),
   page: z.number().int().positive().default(1),

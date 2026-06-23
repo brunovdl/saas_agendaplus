@@ -9,5 +9,6 @@ if (!stripeSecretKey) {
 }
 
 export const stripe = new Stripe(stripeSecretKey || 'sk_test_dummy', {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   apiVersion: '2023-10-16' as any,
 });

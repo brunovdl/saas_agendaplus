@@ -190,9 +190,10 @@ export async function connectWhatsAppAction() {
     }
 
     return { error: 'Não foi possível gerar o QR Code. Verifique se o serviço está online.' };
-  } catch (err: any) {
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : String(err);
     console.error('[Evolution API Connection Action Error]', err);
-    return { error: `Erro de rede ao conectar com Evolution API: ${err.message || err}` };
+    return { error: `Erro de rede ao conectar com Evolution API: ${msg}` };
   }
 }
 
@@ -272,9 +273,10 @@ export async function checkWhatsAppConnectionAction() {
         .eq('id', userId);
       return { connected: false, status: 'disconnected' };
     }
-  } catch (err: any) {
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : String(err);
     console.error('[Evolution API Check Connection Error]', err);
-    return { error: err.message || err };
+    return { error: msg };
   }
 }
 
@@ -328,7 +330,8 @@ export async function disconnectWhatsAppAction() {
 
     revalidatePath('/configuracoes/assistente');
     return { success: true };
-  } catch (err: any) {
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : String(err);
     console.error('[Evolution API Disconnect Error]', err);
     
     // Mesmo em caso de erro na API de terceiros, forçamos a desconexão no Supabase local do cliente
@@ -342,6 +345,6 @@ export async function disconnectWhatsAppAction() {
       .eq('id', userId);
 
     revalidatePath('/configuracoes/assistente');
-    return { success: true, warning: 'Instância desconectada localmente. O servidor externo pode estar offline.' };
+    return { success: true, warning: `Instância desconectada localmente. O servidor externo pode estar offline. (${msg})` };
   }
 }

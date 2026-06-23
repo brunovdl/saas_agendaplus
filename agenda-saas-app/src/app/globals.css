@@ -6,6 +6,32 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 @import "tailwindcss";
 
+/* ─── Animações da Landing Page ─────────────────────────────── */
+@keyframes float {
+  0%, 100% { transform: translateY(0) translateX(1rem); }
+  50%       { transform: translateY(-10px) translateX(1rem); }
+}
+@keyframes scan {
+  0%   { top: 10%; opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { top: 90%; opacity: 0; }
+}
+@keyframes pulse-glow {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.5; }
+}
+.animate-float       { animation: float 4s ease-in-out infinite; }
+.animate-scan        { animation: scan 3s ease-in-out infinite alternate; }
+.animate-pulse-glow  { animation: pulse-glow 2s ease-in-out infinite; }
+
+/* ─── Animação utilitária do Dashboard ──────────────────────── */
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in { animation: fade-in 0.2s ease-out; }
+
 /* ─── Variáveis CSS do Design System ───────────────────────── */
 :root {
   /* Paleta Principal */
@@ -208,6 +234,7 @@ body {
 .chip-confirmado { background-color: #D1FAE5; color: #065F46; }
 .chip-cancelado  { background-color: #FEE2E2; color: #991B1B; }
 .chip-remarcado  { background-color: #EDE9FE; color: #4C1D95; }
+.chip-concluido  { background-color: #E0F2FE; color: #0369A1; }
 
 /* Label de formulário */
 .label {

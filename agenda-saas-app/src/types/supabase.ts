@@ -163,6 +163,24 @@ export type Database = {
           },
         ]
       }
+      chat_history: {
+        Row: {
+          id: number
+          message: Json
+          session_id: string
+        }
+        Insert: {
+          id?: number
+          message: Json
+          session_id: string
+        }
+        Update: {
+          id?: number
+          message?: Json
+          session_id?: string
+        }
+        Relationships: []
+      }
       clientes: {
         Row: {
           created_at: string
@@ -492,7 +510,12 @@ export type Database = {
       }
     }
     Enums: {
-      agendamento_status: "pendente" | "confirmado" | "cancelado" | "remarcado"
+      agendamento_status:
+        | "pendente"
+        | "confirmado"
+        | "cancelado"
+        | "remarcado"
+        | "concluido"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -620,7 +643,13 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      agendamento_status: ["pendente", "confirmado", "cancelado", "remarcado"],
+      agendamento_status: [
+        "pendente",
+        "confirmado",
+        "cancelado",
+        "remarcado",
+        "concluido",
+      ],
     },
   },
 } as const

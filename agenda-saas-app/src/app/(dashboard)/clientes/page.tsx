@@ -1,16 +1,18 @@
 'use client';
 
-import { useState, useEffect, useTransition } from 'react';
+import { useState, useEffect, useTransition, useRef } from 'react';
 import Link from 'next/link';
 import { getClientes, createCliente } from './actions';
 import { Plus, Search, User, Phone, Mail, Calendar as CalendarIcon, ArrowRight, X } from 'lucide-react';
 import type { ClienteFormData } from '@/lib/validations/cliente';
+import type { Cliente } from '@/types/supabase';
 
 export default function ClientesPage() {
-  const [clientes, setClientes] = useState<any[]>([]);
+  const [clientes, setClientes] = useState<Cliente[]>([]);
   const [busca, setBusca] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Formulário
   const [formData, setFormData] = useState<ClienteFormData>({
@@ -24,11 +26,18 @@ export default function ClientesPage() {
   // Carregar e filtrar clientes
   const carregarClientes = async (termo?: string) => {
     const dados = await getClientes(termo);
-    setClientes(dados);
+    setClientes(dados as Cliente[]);
   };
 
+  // Debounce de 300ms na busca — evita chamadas excessivas ao servidor
   useEffect(() => {
-    carregarClientes(busca);
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      carregarClientes(busca);
+    }, 300);
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+    };
   }, [busca]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

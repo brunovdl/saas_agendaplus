@@ -46,9 +46,10 @@ export async function createCheckoutSessionAction(priceId: string) {
         .from('prestadores')
         .update({ stripe_customer_id: stripeCustomerId })
         .eq('id', userId);
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err);
       console.error('[Stripe create customer error]', err);
-      return { error: `Falha ao registrar cliente no gateway de pagamento: ${err.message}` };
+      return { error: `Falha ao registrar cliente no gateway de pagamento: ${msg}` };
     }
   }
 
@@ -72,9 +73,10 @@ export async function createCheckoutSessionAction(priceId: string) {
     });
 
     return { url: session.url };
-  } catch (err: any) {
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : String(err);
     console.error('[Stripe create checkout session error]', err);
-    return { error: `Erro de integração ao criar sessão de pagamento: ${err.message}` };
+    return { error: `Erro de integração ao criar sessão de pagamento: ${msg}` };
   }
 }
 
@@ -108,8 +110,9 @@ export async function createPortalSessionAction() {
     });
 
     return { url: session.url };
-  } catch (err: any) {
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : String(err);
     console.error('[Stripe create portal session error]', err);
-    return { error: `Falha ao abrir portal de faturamento: ${err.message}` };
+    return { error: `Falha ao abrir portal de faturamento: ${msg}` };
   }
 }

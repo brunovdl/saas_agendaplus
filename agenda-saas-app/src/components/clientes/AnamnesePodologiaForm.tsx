@@ -4,6 +4,8 @@ import { useState, useRef, useEffect } from 'react';
 import { saveAnamnesePodologia } from '@/app/(dashboard)/clientes/actions';
 import type { AnamnesePodologia } from '@/types/supabase';
 
+
+
 interface AnamnesePodologiaFormProps {
   clienteId: string;
   clienteNome: string;
@@ -26,6 +28,7 @@ export default function AnamnesePodologiaForm({
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   // Estado unificado dos dados da anamnese (salvo no JSONB 'dados')
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [dados, setDados] = useState<Record<string, any>>(() => {
     return anamneseExistente?.dados || {
       // Geral
@@ -140,8 +143,10 @@ export default function AnamnesePodologiaForm({
         }
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTab]);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const updateDado = (key: string, value: any) => {
     setDados(prev => ({ ...prev, [key]: value }));
   };

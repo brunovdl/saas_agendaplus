@@ -3,6 +3,7 @@
 import { createClient } from '@/lib/supabase/server';
 import { AgendamentoSchema, AgendamentoUpdateSchema, type AgendamentoFormData, type AgendamentoUpdateData } from '@/lib/validations/agendamento';
 import { revalidatePath } from 'next/cache';
+import type { TablesUpdate } from '@/types/supabase';
 
 export async function createAgendamento(data: AgendamentoFormData) {
   const result = AgendamentoSchema.safeParse(data);
@@ -99,7 +100,7 @@ export async function updateAgendamento(id: string, data: AgendamentoUpdateData)
     return { error: 'Acesso negado.' };
   }
 
-  const updatePayload: any = { ...result.data };
+  const updatePayload: TablesUpdate<'agendamentos'> = { ...result.data };
 
   // ─── Sincronização do Cliente no Update ────────────────────────────────
   if (result.data.cliente_telefone) {
@@ -194,6 +195,40 @@ export async function cancelarAgendamento(id: string) {
   if (error) {
     console.error('[Cancel Agendamento Error]', error);
     return { error: 'Erro ao cancelar agendamento.' };
+  }
+
+  revalidatePath('/agenda');
+  revalidatePath('/agendamentos');
+  if (agendamento?.cliente_id) {
+    revalidatePath(`/clientes/${agendamento.cliente_id}`);
+  }
+  return { success: true };
+}
+
+export async function concluirAgendamento(id: string) {
+  const supabase = await createClient();
+
+  const { data: authData } = await supabase.auth.getUser();
+  if (!authData.user) {
+    return { error: 'Acesso negado.' };
+  }
+
+  // Carrega o agendamento para obter o cliente_id para revalidação
+  const { data: agendamento } = await supabase
+    .from('agendamentos')
+    .select('cliente_id')
+    .eq('id', id)
+    .single();
+
+  const { error } = await supabase
+    .from('agendamentos')
+    .update({ status: 'concluido' })
+    .eq('id', id)
+    .eq('user_id', authData.user.id);
+
+  if (error) {
+    console.error('[Concluir Agendamento Error]', error);
+    return { error: 'Erro ao concluir agendamento.' };
   }
 
   revalidatePath('/agenda');

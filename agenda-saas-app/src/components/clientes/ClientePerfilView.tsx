@@ -2,8 +2,8 @@
 
 import { useState, useTransition } from 'react';
 import { saveAnamnese, addHistoricoServico, updateCliente } from '@/app/(dashboard)/clientes/actions';
-import { Calendar as CalendarIcon, User, Phone, Mail, FileText, Wrench, Plus, Check, Clock, Edit3, X } from 'lucide-react';
-import type { ClienteFormData, AnamneseFormData, HistoricoServicoFormData } from '@/lib/validations/cliente';
+import { Calendar as CalendarIcon, Phone, Mail, FileText, Wrench, Plus, Check, Clock, Edit3, X } from 'lucide-react';
+import type { ClienteFormData, AnamneseFormData } from '@/lib/validations/cliente';
 import type { AnamnesePodologia } from '@/types/supabase';
 import AnamnesePodologiaForm from './AnamnesePodologiaForm';
 
@@ -352,6 +352,7 @@ export default function ClientePerfilView({ dados, nicho }: ClientePerfilViewPro
                       pendente: 'bg-amber-50 text-amber-700 border-amber-100',
                       cancelado: 'bg-rose-50 text-rose-700 border-rose-100',
                       remarcado: 'bg-blue-50 text-blue-700 border-blue-100',
+                      concluido: 'bg-sky-50 text-sky-700 border-sky-100',
                     };
 
                     return (
@@ -837,6 +838,7 @@ export default function ClientePerfilView({ dados, nicho }: ClientePerfilViewPro
       )}
 
       {nicho === 'podologia' && anamnesePodologia && (() => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const dadosPodologia = (anamnesePodologia.dados || {}) as Record<string, any>;
         
         // Definições estáticas para uso no relatório
@@ -1497,6 +1499,7 @@ export default function ClientePerfilView({ dados, nicho }: ClientePerfilViewPro
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '48px', textAlign: 'center', alignItems: 'end', marginTop: '20px' }}>
                   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                     {dadosPodologia.assinatura_paciente ? (
+                      // eslint-disable-next-line @next/next/no-img-element
                       <img 
                         src={dadosPodologia.assinatura_paciente} 
                         alt="Assinatura Eletrônica do Paciente" 

@@ -4,6 +4,7 @@ import { useState, useEffect, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import MobileHeader from '@/components/layout/MobileHeader';
+import type { Json } from '@/types/supabase';
 import {
   connectWhatsAppAction,
   checkWhatsAppConnectionAction,
@@ -99,7 +100,7 @@ export default function AssistenteConfigPage() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
-      const { data, error } = await supabase
+      const { data } = await supabase
         .from('prestadores')
         .select('nome_negocio, configuracao_assistente, whatsapp_status, whatsapp_numero, subscription_tier')
         .eq('id', user.id)
@@ -211,7 +212,7 @@ export default function AssistenteConfigPage() {
         .from('prestadores')
         .update({
           nome_negocio: nomeNegocio,
-          configuracao_assistente: config as any,
+          configuracao_assistente: config as unknown as Json,
         })
         .eq('id', user.id);
 

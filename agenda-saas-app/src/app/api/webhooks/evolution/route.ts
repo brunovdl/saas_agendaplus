@@ -60,8 +60,9 @@ export async function POST(req: Request) {
 
     // Outros eventos (ex: mensagens recebidas) podem ser ignorados aqui e tratados no n8n diretamente
     return NextResponse.json({ success: true, message: 'Evento ignorado no webhook do sistema de agenda.' });
-  } catch (err: any) {
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : String(err);
     console.error('[Evolution API Webhook Route Crash]', err);
-    return NextResponse.json({ error: err.message || err }, { status: 500 });
+    return NextResponse.json({ error: msg }, { status: 500 });
   }
 }

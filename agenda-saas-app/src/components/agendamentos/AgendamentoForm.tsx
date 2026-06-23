@@ -4,7 +4,7 @@ import { useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
-import { FormAgendamentoSchema, type FormAgendamentoData, type AgendamentoFormData } from '@/lib/validations/agendamento';
+import { FormAgendamentoSchema, FormEditarAgendamentoSchema, type FormAgendamentoData, type AgendamentoFormData } from '@/lib/validations/agendamento';
 import { createAgendamento, updateAgendamento } from '@/app/(dashboard)/agendamentos/actions';
 
 interface AgendamentoFormProps {
@@ -51,7 +51,7 @@ export default function AgendamentoForm({ initialData, onSuccess, onCancel, read
     handleSubmit,
     formState: { errors },
   } = useForm<FormAgendamentoData>({
-    resolver: zodResolver(FormAgendamentoSchema),
+    resolver: zodResolver(isEdit ? FormEditarAgendamentoSchema : FormAgendamentoSchema),
     defaultValues: getInitialValues(),
   });
 

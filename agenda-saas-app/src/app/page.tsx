@@ -40,27 +40,8 @@ export default async function HomePage() {
       style={{ fontFamily: 'Inter, system-ui, sans-serif' }}
       className="min-h-screen text-white"
     >
-      {/* ─── Estilos de Animação Globais ─────────────────────────────────────── */}
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-        @keyframes float {
-          0%, 100% { transform: translateY(0) translateX(1rem); }
-          50%       { transform: translateY(-10px) translateX(1rem); }
-        }
-        @keyframes scan {
-          0%   { top: 10%; opacity: 0; }
-          10%  { opacity: 1; }
-          90%  { opacity: 1; }
-          100% { top: 90%; opacity: 0; }
-        }
-        @keyframes pulse-glow {
-          0%, 100% { opacity: 1; }
-          50%       { opacity: 0.5; }
-        }
-        .animate-float { animation: float 4s ease-in-out infinite; }
-        .animate-scan  { animation: scan 3s ease-in-out infinite alternate; }
-        .animate-pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
-      `}</style>
+
+
 
       {/* ═══════════════════════════════════════════════════════════════════════
           NAV BAR — Navy Dark, sticky
@@ -103,17 +84,17 @@ export default async function HomePage() {
           </div>
 
           {/* CTAs */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             <Link
               href="/login"
-              className="hidden md:flex px-4 py-2 text-sm font-bold transition-colors"
+              className="flex px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-bold transition-colors"
               style={{ border: '1.5px solid #00D4FF', color: '#00D4FF', borderRadius: 6 }}
             >
               Entrar
             </Link>
             <Link
               href="/cadastro"
-              className="flex px-5 py-2.5 text-sm font-bold transition-all"
+              className="flex px-3.5 py-2 sm:px-5 sm:py-2.5 text-xs sm:text-sm font-bold transition-all"
               style={{
                 background: '#00D4FF', color: '#0D1B3E', borderRadius: 6,
                 boxShadow: '0 4px 20px rgba(0,212,255,0.3)',
