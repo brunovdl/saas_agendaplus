@@ -1,9 +1,22 @@
 import Link from 'next/link';
 import AgendamentoList from '@/components/agendamentos/AgendamentoList';
+import AgendamentoFiltros from '@/components/agendamentos/AgendamentoFiltros';
 import { Suspense } from 'react';
 import { Plus } from 'lucide-react';
 
-export default function AgendamentosPage() {
+interface PageProps {
+  searchParams: Promise<{
+    data?: string;
+    status?: string;
+    nome?: string;
+  }>;
+}
+
+export default async function AgendamentosPage({ searchParams }: PageProps) {
+  const resolvedSearchParams = await searchParams;
+  // Gera uma chave única baseada nos filtros para recarregar o Suspense e exibir o loading fallback adequadamente
+  const listKey = JSON.stringify(resolvedSearchParams || {});
+
   return (
     <div className="px-4 py-6 md:px-8 md:py-8 max-w-5xl mx-auto relative min-h-[calc(100vh-64px)]">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 md:mb-8">
@@ -13,8 +26,11 @@ export default function AgendamentosPage() {
         </div>
       </div>
 
-      <Suspense fallback={<div className="text-center py-12 text-[#76767F]">Carregando agendamentos...</div>}>
-        <AgendamentoList />
+      {/* Componente de Filtros Reativos */}
+      <AgendamentoFiltros />
+
+      <Suspense key={listKey} fallback={<div className="text-center py-12 text-[#76767F]">Carregando agendamentos...</div>}>
+        <AgendamentoList searchParams={resolvedSearchParams} />
       </Suspense>
 
       {/* Floating Action Button (FAB) / Widget flutuante para criar novo agendamento */}

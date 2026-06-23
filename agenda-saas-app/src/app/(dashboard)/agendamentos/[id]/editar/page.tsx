@@ -3,7 +3,15 @@ import AgendamentoForm from '@/components/agendamentos/AgendamentoForm';
 import MobileHeader from '@/components/layout/MobileHeader';
 import { notFound } from 'next/navigation';
 
-export default async function EditarAgendamentoPage({ params }: { params: { id: string } }) {
+export default async function EditarAgendamentoPage({ 
+  params,
+  searchParams 
+}: { 
+  params: Promise<{ id: string }>;
+  searchParams?: Promise<{ remarcar?: string }>;
+}) {
+  const resolvedParams = await params;
+  const resolvedSearchParams = await searchParams;
   const supabase = await createClient();
   
   const { data: authData } = await supabase.auth.getUser();
@@ -12,12 +20,16 @@ export default async function EditarAgendamentoPage({ params }: { params: { id: 
   const { data: agendamento, error } = await supabase
     .from('agendamentos')
     .select('*')
-    .eq('id', params.id)
+    .eq('id', resolvedParams.id)
     .eq('user_id', authData.user.id)
     .single();
 
   if (error || !agendamento) {
     return notFound();
+  }
+
+  if (resolvedSearchParams?.remarcar === 'true') {
+    agendamento.status = 'remarcado';
   }
 
   return (

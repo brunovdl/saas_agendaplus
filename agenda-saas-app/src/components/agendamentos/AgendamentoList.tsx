@@ -1,7 +1,15 @@
 import { createClient } from '@/lib/supabase/server';
 import AgendamentoCard from './AgendamentoCard';
 
-export default async function AgendamentoList() {
+interface AgendamentoListProps {
+  searchParams?: {
+    data?: string;
+    status?: string;
+    nome?: string;
+  };
+}
+
+export default async function AgendamentoList({ searchParams }: AgendamentoListProps) {
   const supabase = await createClient();
 
   const { data: authData } = await supabase.auth.getUser();
@@ -9,12 +17,49 @@ export default async function AgendamentoList() {
     return <p>Não autorizado.</p>;
   }
 
-  // Busca os agendamentos do usuário logado ordenados por data (mais recentes primeiro)
-  const { data: agendamentos, error } = await supabase
+  // Inicia a query do Supabase buscando os agendamentos do usuário logado
+  let query = supabase
     .from('agendamentos')
     .select('*')
-    .eq('user_id', authData.user.id)
-    .order('data_hora_inicio', { ascending: true });
+    .eq('user_id', authData.user.id);
+
+  // Filtro por Nome do Cliente (busca parcial insensível a maiúsculas/minúsculas)
+  if (searchParams?.nome) {
+    query = query.ilike('cliente_nome', `%${searchParams.nome}%`);
+  }
+
+  // Filtro por Status
+  if (searchParams?.status && searchParams.status !== 'todos') {
+    query = query.eq('status', searchParams.status as 'pendente' | 'confirmado' | 'cancelado' | 'remarcado');
+  }
+
+  // Filtro por Data:
+  // - Sem parâmetros (primeira carga): padrão é hoje local.
+  // - Data vazia (data=): exibe todas as datas.
+  // - Data específica (data=YYYY-MM-DD): exibe a data selecionada.
+  let targetDateStr: string | undefined = undefined;
+
+  if (searchParams === undefined || !('data' in searchParams)) {
+    // Primeiro acesso: usar data de hoje local do servidor
+    const d = new Date();
+    const offset = d.getTimezoneOffset();
+    const localD = new Date(d.getTime() - offset * 60 * 1000);
+    targetDateStr = localD.toISOString().split('T')[0];
+  } else if (searchParams.data) {
+    targetDateStr = searchParams.data;
+  }
+
+  if (targetDateStr) {
+    // Converte data local YYYY-MM-DD para ISO convertendo para UTC
+    const start = new Date(`${targetDateStr}T00:00:00`);
+    const end = new Date(`${targetDateStr}T23:59:59.999`);
+    
+    query = query
+      .gte('data_hora_inicio', start.toISOString())
+      .lte('data_hora_inicio', end.toISOString());
+  }
+
+  const { data: agendamentos, error } = await query.order('data_hora_inicio', { ascending: true });
 
   if (error) {
     return <p>Erro ao carregar agendamentos: {error.message}</p>;

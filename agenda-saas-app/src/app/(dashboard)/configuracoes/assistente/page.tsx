@@ -336,9 +336,9 @@ export default function AssistenteConfigPage() {
     <button
       onClick={handleSave}
       disabled={isPending || !hasChanges}
-      className="px-2.5 py-1.5 bg-[#0D1B3E] text-white font-bold text-[11px] rounded-[6px] hover:bg-[#152448] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+      className="px-2.5 py-1.5 bg-[#0D1B3E] text-white font-bold text-[11px] rounded-[6px] hover:bg-[#152448] disabled:opacity-50 disabled:cursor-not-allowed transition-colors whitespace-nowrap"
     >
-      {isPending ? '...' : 'Salvar'}
+      {isPending ? 'Salvando...' : 'Salvar Alterações'}
     </button>
   );
 

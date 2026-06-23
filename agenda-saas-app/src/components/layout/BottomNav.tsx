@@ -6,7 +6,7 @@ import { Calendar, Sparkles, Settings, Users } from 'lucide-react';
 
 const navItems = [
   { name: 'Agenda', href: '/agenda', icon: Calendar },
-  { name: 'Auto', href: '/agendamentos', icon: Sparkles },
+  { name: 'Agendamentos', href: '/agendamentos', icon: Sparkles },
   { name: 'Clientes', href: '/clientes', icon: Users },
   { name: 'Configs', href: '/configuracoes', icon: Settings },
 ];

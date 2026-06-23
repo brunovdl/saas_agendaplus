@@ -1,6 +1,8 @@
 Response always in pt-BR.
 the language system is in pt-BR
 
+use the folder .agent to content details and roles the system.
+
 Behavioral guidelines to reduce common LLM coding mistakes. Merge with project-specific instructions as needed.
 
 Tradeoff: These guidelines bias toward caution over speed. For trivial tasks, use judgment.

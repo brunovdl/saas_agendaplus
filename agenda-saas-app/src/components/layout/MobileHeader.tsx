@@ -37,7 +37,7 @@ export default function MobileHeader({ title, backHref, rightAction }: MobileHea
         {title}
       </h1>
       
-      <div className="flex items-center justify-end w-12">
+      <div className="flex items-center justify-end min-w-12 shrink-0">
         {rightAction ? rightAction : <div className="w-9" />}
       </div>
     </header>
