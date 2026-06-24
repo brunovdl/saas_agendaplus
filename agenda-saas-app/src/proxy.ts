@@ -8,8 +8,6 @@ import { NextResponse, type NextRequest } from 'next/server';
  *  1. Atualizar tokens de sessão expirados (refresh automático via cookies).
  *  2. Redirecionar usuários não autenticados para /login.
  *  3. Redirecionar usuários autenticados para fora das rotas de auth.
- *
- * Next.js 16: exportar como named export "proxy" ou default export.
  */
 async function proxyHandler(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request });
@@ -66,7 +64,7 @@ async function proxyHandler(request: NextRequest) {
   return supabaseResponse;
 }
 
-// Export nomeado "proxy" — convenção Next.js 16
+// Export nomeado "proxy" — convenção obrigatória do Next.js 16
 export { proxyHandler as proxy };
 
 export const config = {

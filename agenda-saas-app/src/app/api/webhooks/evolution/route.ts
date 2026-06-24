@@ -1,11 +1,21 @@
 import { NextResponse } from 'next/server';
 import { createAdminClient } from '@/lib/supabase/admin';
-import { configureInstanceHelper } from '@/app/actions/evolution';
+import { configureInstanceHelper } from '@/lib/evolution';
 
 export async function POST(req: Request) {
   try {
+    // Validar token de autenticação do webhook
+    const authHeader = req.headers.get('authorization');
+    const expectedSecret = process.env.WEBHOOK_SECRET;
+
+    if (expectedSecret && (!authHeader || authHeader !== `Bearer ${expectedSecret}`)) {
+      console.warn('[Evolution API Webhook Warning] Tentativa de acesso não autorizada.');
+      return NextResponse.json({ error: 'Não autorizado.' }, { status: 401 });
+    }
+
     const payload = await req.json();
     console.log('[Evolution API Webhook Received]', JSON.stringify(payload, null, 2));
+
 
     const event = payload.event;
     const instanceName = payload.instance;

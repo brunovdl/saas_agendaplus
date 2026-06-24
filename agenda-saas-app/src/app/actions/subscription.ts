@@ -16,6 +16,16 @@ export async function createCheckoutSessionAction(priceId: string) {
 
   const userId = authData.user.id;
 
+  // Validação do Price ID (prevenir Parameter Tampering)
+  const allowedPrices = [
+    process.env.STRIPE_PRICE_NORMAL_ID,
+    process.env.STRIPE_PRICE_COMPLETE_ID
+  ].filter(Boolean);
+
+  if (!allowedPrices.includes(priceId)) {
+    return { error: 'O plano selecionado é inválido.' };
+  }
+
   // 1. Buscar dados do prestador
   const { data: prestador, error: prestadorErr } = await supabase
     .from('prestadores')
