@@ -321,7 +321,12 @@ export default function LoginPage() {
               </div>
 
               <div>
-                <label htmlFor="password" className="label">Senha</label>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                  <label htmlFor="password" className="label" style={{ margin: 0 }}>Senha</label>
+                  <a href="/esqueci-senha" style={{ fontSize: '13px', color: '#2563EB', textDecoration: 'none', fontWeight: 600 }}>
+                    Esqueci minha senha?
+                  </a>
+                </div>
                 <input
                   id="password"
                   type="password"

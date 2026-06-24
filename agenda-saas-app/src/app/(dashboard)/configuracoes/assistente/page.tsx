@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import MobileHeader from '@/components/layout/MobileHeader';
 import type { Json } from '@/types/supabase';
+import { Sparkles } from 'lucide-react';
+import { melhorarDescricaoComIA } from './actions';
 import {
   connectWhatsAppAction,
   checkWhatsAppConnectionAction,
@@ -79,6 +81,37 @@ export default function AssistenteConfigPage() {
   const [originalNomeNegocio, setOriginalNomeNegocio] = useState('');
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
+
+  // Estados para reescrita com IA (Groq)
+  const [sugestaoIA, setSugestaoIA] = useState<string | null>(null);
+  const [loadingIA, setLoadingIA] = useState(false);
+  const [errorIA, setErrorIA] = useState<string | null>(null);
+
+  async function handleMelhorarDescricao() {
+    const desc = config.descricao_negocio;
+    if (!desc || desc.trim() === '') {
+      setErrorIA('Por favor, digite um rascunho da descrição antes de tentar reescrever com IA.');
+      return;
+    }
+
+    setLoadingIA(true);
+    setErrorIA(null);
+    setSugestaoIA(null);
+
+    try {
+      const res = await melhorarDescricaoComIA(desc);
+      if (res.error) {
+        setErrorIA(res.error);
+      } else if (res.success && res.descricaoSugerida) {
+        setSugestaoIA(res.descricaoSugerida);
+      }
+    } catch (err) {
+      console.error(err);
+      setErrorIA('Ocorreu um erro ao processar a solicitação com a IA.');
+    } finally {
+      setLoadingIA(false);
+    }
+  }
 
   // Estados do WhatsApp
   const [whatsappStatus, setWhatsappStatus] = useState<string>('disconnected');
@@ -568,11 +601,33 @@ export default function AssistenteConfigPage() {
                 <label className="block font-bold text-sm text-[#45464E]" htmlFor="descricao_negocio">
                   Descrição do Negócio
                 </label>
-                <span className={`text-xs font-semibold ${
-                  (config.descricao_negocio || '').length > 900 ? 'text-[#BA1A1A]' : 'text-[#76767F]'
-                }`}>
-                  {(config.descricao_negocio || '').length}/1000
-                </span>
+                <div className="flex items-center gap-3">
+                  <button
+                    id="btn-melhorar-descricao-ia"
+                    type="button"
+                    onClick={handleMelhorarDescricao}
+                    disabled={loadingIA || !(config.descricao_negocio || '').trim()}
+                    className="btn-accent"
+                    style={{
+                      padding: '4px 10px',
+                      fontSize: '12px',
+                      fontWeight: 600,
+                      borderRadius: '6px',
+                      height: '28px',
+                      gap: '4px',
+                      display: 'flex',
+                      alignItems: 'center'
+                    }}
+                  >
+                    <Sparkles size={13} className={loadingIA ? 'animate-spin' : ''} />
+                    {loadingIA ? 'Melhorando...' : 'Melhorar com IA'}
+                  </button>
+                  <span className={`text-xs font-semibold ${
+                    (config.descricao_negocio || '').length > 900 ? 'text-[#BA1A1A]' : 'text-[#76767F]'
+                  }`}>
+                    {(config.descricao_negocio || '').length}/1000
+                  </span>
+                </div>
               </div>
               <textarea
                 id="descricao_negocio"
@@ -588,6 +643,53 @@ export default function AssistenteConfigPage() {
                 placeholder="Descreva sobre o seu negócio, os serviços prestados, a localização ou regras específicas para a assistente saber como responder aos clientes..."
                 maxLength={1000}
               />
+
+              {errorIA && (
+                <p className="error-msg text-xs mt-1" role="alert">{errorIA}</p>
+              )}
+
+              {sugestaoIA && (
+                <div 
+                  id="preview-ia-container"
+                  className="mt-3 p-4 rounded-[8px]" 
+                  style={{ 
+                    backgroundColor: 'rgba(0, 212, 255, 0.05)', 
+                    border: '1.5px dashed rgba(0, 212, 255, 0.3)',
+                    fontFamily: 'Inter, sans-serif'
+                  }}
+                >
+                  <div className="flex items-center gap-1.5 mb-2">
+                    <Sparkles size={14} className="text-[#00A8CC]" />
+                    <span className="text-xs font-bold text-[#0D1B3E]">Sugestão da IA (Groq):</span>
+                  </div>
+                  <p className="text-sm text-[#45464E] leading-relaxed whitespace-pre-wrap mb-4 bg-white/60 p-3 rounded-[6px] border border-[#E8ECF0]">
+                    {sugestaoIA}
+                  </p>
+                  <div className="flex gap-2">
+                    <button
+                      id="btn-aplicar-descricao-sugerida"
+                      type="button"
+                      onClick={() => {
+                        setConfig((prev) => ({ ...prev, descricao_negocio: sugestaoIA }));
+                        setSugestaoIA(null);
+                      }}
+                      className="btn-primary"
+                      style={{ padding: '6px 12px', fontSize: '12px', fontWeight: 600 }}
+                    >
+                      Aplicar sugestão
+                    </button>
+                    <button
+                      id="btn-descartar-descricao-sugerida"
+                      type="button"
+                      onClick={() => setSugestaoIA(null)}
+                      className="btn-secondary"
+                      style={{ padding: '6px 12px', fontSize: '12px', fontWeight: 600 }}
+                    >
+                      Descartar
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </section>
