@@ -252,37 +252,143 @@ body {
   margin-top: 4px;
 }
 
-/* ─── FullCalendar Overrides (Stitch Design) ───────────────── */
+/* ─── FullCalendar Overrides (Stitch Design Moderna) ───────── */
 .custom-calendar-wrapper .fc {
   font-family: var(--font-family);
   background: white;
-  border-radius: 8px;
-  padding: 16px;
+  border-radius: 12px;
+  padding: 20px;
+  border: none;
 }
 .custom-calendar-wrapper .fc-theme-standard td, 
 .custom-calendar-wrapper .fc-theme-standard th {
-  border-color: var(--color-outline-variant);
+  border-color: rgba(198, 198, 207, 0.3) !important; /* Bordas suaves e finas */
 }
 .custom-calendar-wrapper .fc-col-header-cell {
-  background-color: var(--color-offwhite);
-  padding: 8px 0;
+  background-color: #F8FAFC !important;
+  padding: 10px 0 !important;
 }
 .custom-calendar-wrapper .fc-col-header-cell-cushion {
   font-weight: 700;
-  font-size: 14px;
-  color: var(--color-on-surface-variant);
+  font-size: 13px;
+  color: var(--color-navy);
+  text-transform: capitalize;
 }
+
+/* Cantos arredondados no topo da barra de dias da semana */
+.custom-calendar-wrapper .fc-col-header {
+  border-radius: 8px 8px 0 0;
+  overflow: hidden;
+}
+
+/* Dia Atual: Destaque circular sutil */
+.custom-calendar-wrapper .fc-day-today {
+  background-color: rgba(37, 99, 235, 0.02) !important;
+}
+.custom-calendar-wrapper .fc-day-today .fc-daygrid-day-number {
+  background-color: var(--color-blue-dark) !important;
+  color: white !important;
+  border-radius: 50% !important;
+  width: 26px !important;
+  height: 26px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 4px !important;
+  font-weight: 700 !important;
+}
+
+/* Reset de estilos nativos de eventos do FullCalendar */
 .custom-calendar-wrapper .fc-event {
-  border-radius: 6px;
-  border: none;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-  padding: 2px 4px;
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 2px 4px !important;
+  cursor: pointer;
 }
 .custom-calendar-wrapper .fc-event-main {
-  font-size: 11px;
-  font-weight: 600;
-  color: white;
+  padding: 0 !important;
 }
+
+/* Estilização dos Cartões Customizados baseados nos status */
+.event-card {
+  display: flex;
+  flex-direction: column;
+  padding: 6px 8px;
+  border-radius: 6px;
+  transition: transform 0.1s ease, box-shadow 0.15s ease;
+  box-shadow: 0 1px 3px rgba(13, 27, 62, 0.04);
+  width: 100%;
+}
+.event-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(13, 27, 62, 0.08);
+}
+.event-card-title {
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.event-card-time {
+  font-size: 9.5px;
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+/* Status: Pendente */
+.event-card-pendente {
+  background-color: #EFF6FF !important;
+  border: 1px solid rgba(37, 99, 235, 0.15) !important;
+}
+.event-card-pendente .event-card-title { color: #1E4DB7; }
+.event-card-pendente .event-card-time { color: #2563EB; }
+
+/* Status: Confirmado */
+.event-card-confirmado {
+  background-color: #E0F7FA !important;
+  border: 1px solid rgba(0, 212, 255, 0.3) !important;
+  position: relative;
+}
+.event-card-confirmado .event-card-title { color: #0D1B3E; padding-right: 14px; }
+.event-card-confirmado .event-card-time { color: #00A8CC; }
+
+/* Status: Remarcado */
+.event-card-remarcado {
+  background-color: #F5F3FF !important;
+  border: 1px solid rgba(99, 102, 241, 0.15) !important;
+}
+.event-card-remarcado .event-card-title { color: #4C1D95; }
+.event-card-remarcado .event-card-time { color: #6366F1; }
+
+/* Status: Concluído */
+.event-card-concluido {
+  background-color: #FFFFFF !important;
+  border: 1px solid rgba(198, 198, 207, 0.35) !important;
+  border-left: 4px solid #10B981 !important;
+  border-radius: 4px 6px 6px 4px !important;
+}
+.event-card-concluido .event-card-title { color: #181C1F; }
+.event-card-concluido .event-card-time { color: #76767F; }
+
+/* Status: Cancelado */
+.event-card-cancelado {
+  background-color: #FFFFFF !important;
+  border: 1px solid rgba(198, 198, 207, 0.35) !important;
+  border-left: 4px solid #EF4444 !important;
+  border-radius: 4px 6px 6px 4px !important;
+  opacity: 0.65;
+}
+.event-card-cancelado .event-card-title {
+  color: #76767F;
+  text-decoration: line-through;
+}
+.event-card-cancelado .event-card-time { color: #9CA3AF; }
+
+/* Estilização dos Botões Superiores do Calendário */
 .custom-calendar-wrapper .fc-button-primary {
   background-color: white !important;
   color: var(--color-on-surface-variant) !important;
@@ -307,6 +413,7 @@ body {
   background-color: var(--color-cyan) !important;
   color: var(--color-navy) !important;
   border-color: var(--color-cyan) !important;
+  font-weight: 700 !important;
 }
 
 /* ─── FullCalendar Mobile Overrides ─────────────────────────── */

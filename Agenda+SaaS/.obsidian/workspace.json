@@ -1,0 +1,218 @@
+{
+  "main": {
+    "id": "12b3ca1568f7f0be",
+    "type": "split",
+    "children": [
+      {
+        "id": "9fee98c016e71c19",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "de1db74c54846d4a",
+            "type": "leaf",
+            "state": {
+              "type": "graph",
+              "state": {},
+              "icon": "lucide-git-fork",
+              "title": "Visualização em gráfico"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "7116a23adcc08c67",
+    "type": "split",
+    "children": [
+      {
+        "id": "ce4099dcef475a57",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "06ea750fd91a2ee0",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Explorador de arquivos"
+            }
+          },
+          {
+            "id": "25ede09cbbe74e3c",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Procurar"
+            }
+          },
+          {
+            "id": "731614ae5a3c5351",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Marcadores"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 200
+  },
+  "right": {
+    "id": "4163ae73da90b4f2",
+    "type": "split",
+    "children": [
+      {
+        "id": "31c4f1e7c409d509",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "c5563ac6cf26d84f",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Links inversos"
+            }
+          },
+          {
+            "id": "c958da9c2c2a552c",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Links de saída"
+            }
+          },
+          {
+            "id": "bf0d47b940507276",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Etiquetas"
+            }
+          },
+          {
+            "id": "9a8d2ff516bbe4c1",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "Todas as propriedades"
+            }
+          },
+          {
+            "id": "95209567a2f988f4",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Sumário"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Abrir a troca rápida": false,
+      "graph:Abrir visualização em gráfico": false,
+      "canvas:Criar novo canvas": false,
+      "daily-notes:Abrir a nota de hoje": false,
+      "templates:Inserir modelo": false,
+      "command-palette:Abrir paleta de comandos": false,
+      "bases:Criar nova base": false
+    }
+  },
+  "active": "de1db74c54846d4a",
+  "lastOpenFiles": [
+    "Supabase.md",
+    "Cerebro-IA.md",
+    "Sessoes/Sessão - Erro - No ScrollGrid implementation (471c70bb).md",
+    "Skills/Skill - Skill QA Senior — Diretrizes de Testes A2A (Agent-to-Agent).md",
+    "Skills/Skill - Regras de Frontend — Martins AI Automation (Agenda+ SaaS).md",
+    "Skills/Skill - Regras de Backend — Martins AI Automation (Agenda+ SaaS).md",
+    "Skills/Skill - Auditor de Segurança SaaS.md",
+    "Skills",
+    "Sessoes/Sessão - Testar MCPs (3e831015).md",
+    "Sessoes/Sessão - -grill-me Duranteo andamento do projeto, algumas coisas forma... (e2896a08).md",
+    "Sessoes/Sessão - Com base no projeto crie um arquivo design.md deste projeto (d27132bc).md",
+    "Sessoes/Sessão - Inserção de Logo e Ajustes do Menu (Agenda+ SaaS) (27c1c30a).md",
+    "Sessoes/27c1c30a-b7b8-4745-8c0d-d5d4ef10a332/Walkthrough - Inserção de Logo e Ajustes do Menu (Agenda+ SaaS) (27c1c30a).md",
+    "Sessao-Atual.md",
+    "Sessoes/Sessão - Correção de Cálculo de Dias da Semana no Agente de IA (c1c19473).md",
+    "Sessoes/c1c19473-8f80-4b06-b503-c1d51b5698c5/Walkthrough - Correção de Cálculo de Dias da Semana no Agente de IA (c1c19473).md",
+    "Sessoes/c1c19473-8f80-4b06-b503-c1d51b5698c5/Tarefas - Correção de Cálculo de Dias da Semana no Agente de IA (c1c19473).md",
+    "Sessoes/c1c19473-8f80-4b06-b503-c1d51b5698c5/Plano - Correção de Cálculo de Dias da Semana no Agente de IA (c1c19473).md",
+    "Sessoes/Sessão - Plano de Implementação- Exportação Inteligente em PDF (Podologia) (a4982d5f).md",
+    "Sessoes/a4982d5f-4ce6-4857-8e60-2e9bd32e73d9/Walkthrough - Plano de Implementação- Exportação Inteligente em PDF (Podologia) (a4982d5f).md",
+    "Sessoes/a4982d5f-4ce6-4857-8e60-2e9bd32e73d9/Tarefas - Plano de Implementação- Exportação Inteligente em PDF (Podologia) (a4982d5f).md",
+    "Sessoes/9c464676-11fd-4d3d-be1d-24108daae2bc/Plano - Plano de Implementação — Substituição de Ícones na Página Inicial (9c464676).md",
+    "Sessoes/Sessão - Plano de Implementação- Conexão WhatsApp via Evolution API & n8n (8927a80e).md",
+    "Sessoes/71f1cbda-8245-4913-96a8-095abe71b020/Walkthrough - Configuração do MCP do n8n no Antigravity (71f1cbda).md",
+    "Sessoes/71f1cbda-8245-4913-96a8-095abe71b020/Tarefas - Configuração do MCP do n8n no Antigravity (71f1cbda).md",
+    "Sessoes/71f1cbda-8245-4913-96a8-095abe71b020/Plano - Configuração do MCP do n8n no Antigravity (71f1cbda).md",
+    "Sessoes/Sessão - Plano de Implementação — Página de Configurações Funcional (6ba457d4).md",
+    "Sessoes/4dd41202-a198-4807-83f2-8c8abc267a37",
+    "Sessoes/4b759b8f-1276-4dc2-9a63-b5eab5cb41e9",
+    "Sessoes/471c70bb-d22b-4087-9274-7afa5990a102",
+    "Sessoes/44583107-0e06-4cce-a72a-df4efa88a550",
+    "Sessoes/4e2e7f3c-2aab-442a-b007-1887772a9405",
+    "Sessoes/1aa516ca-85a4-4843-adda-e691426aed96",
+    "Sessoes/tempmediaStorage",
+    "Sessoes/f90a2eec-eafb-4e53-b26f-45bc4544c18e",
+    "Sessoes/e6b63ed9-caeb-4a28-8278-e59639ed8c40"
+  ]
+}

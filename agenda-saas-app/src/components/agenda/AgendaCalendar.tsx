@@ -8,7 +8,7 @@ import interactionPlugin from '@fullcalendar/interaction';
 import { createClient } from '@/lib/supabase/client';
 import type { Agendamento } from '@/types/supabase';
 import AgendamentoForm from '@/components/agendamentos/AgendamentoForm';
-import { Plus, X } from 'lucide-react';
+import { Plus, X, Sparkles } from 'lucide-react';
 
 // Helper de mapeamento de cores dos chips de status para o calendário
 const STATUS_COLORS: Record<string, string> = {
@@ -120,13 +120,36 @@ export default function AgendaCalendar() {
     setSelectedEventId(undefined);
   };
 
+  // Função de renderização customizada para os cartões de eventos baseados em status
+  const renderEventContent = (eventInfo: any) => {
+    const status = eventInfo.event.extendedProps.status || 'confirmado';
+    const title = eventInfo.event.title;
+    
+    // Formatar o horário de início (ex: "09:00")
+    const startTime = eventInfo.event.start 
+      ? new Date(eventInfo.event.start).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', hour12: false }) 
+      : '';
+
+    return (
+      <div className={`event-card event-card-${status}`} id={`agenda-event-${eventInfo.event.id}`}>
+        <div className="event-card-title flex items-center justify-between gap-1">
+          <span>{title.split(' (')[0]}</span>
+          {status === 'confirmado' && (
+            <Sparkles size={11} className="text-[#00D4FF] shrink-0" />
+          )}
+        </div>
+        {startTime && <div className="event-card-time">{startTime}</div>}
+      </div>
+    );
+  };
+
   return (
     <div className="h-full w-full custom-calendar-wrapper p-2 md:p-4 relative">
       <div style={{ height: '100%' }} className="calendar-scroll-wrapper">
         <FullCalendar
           ref={calendarRef}
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-          initialView="timeGridWeek"
+          initialView="dayGridMonth"
           headerToolbar={{
             left: 'prev,next today',
             center: 'title',
@@ -135,6 +158,7 @@ export default function AgendaCalendar() {
           events={events}
           dateClick={handleDateClick}
           eventClick={handleEventClick}
+          eventContent={renderEventContent}
           height="100%"
           nowIndicator={true}
           slotMinTime="07:00:00"

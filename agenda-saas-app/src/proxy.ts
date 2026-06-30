@@ -41,7 +41,7 @@ async function proxyHandler(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Rotas públicas que não precisam de autenticação
-  const publicRoutes = ['/', '/login', '/cadastro', '/auth/callback', '/esqueci-senha'];
+  const publicRoutes = ['/', '/login', '/cadastro', '/auth/callback', '/auth/confirm', '/esqueci-senha'];
   const isPublicRoute = publicRoutes.some((r) =>
     r === '/' ? pathname === '/' : pathname.startsWith(r)
   );
