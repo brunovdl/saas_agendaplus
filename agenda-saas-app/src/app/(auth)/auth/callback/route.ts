@@ -6,9 +6,15 @@ import { NextResponse } from 'next/server';
  * Troca o code por uma sessão válida e redireciona para /agenda.
  */
 export async function GET(request: Request) {
-  const { searchParams, origin } = new URL(request.url);
+  const { searchParams } = new URL(request.url);
   const code = searchParams.get('code');
   const next = searchParams.get('next') ?? '/agenda';
+
+  // Obter a URL base robusta considerando proxies reversos e variáveis de ambiente
+  const proto = request.headers.get('x-forwarded-proto') ?? 'http';
+  const host = request.headers.get('x-forwarded-host') ?? request.headers.get('host') ?? 'localhost:3000';
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || `${proto}://${host}`;
+  const origin = appUrl.endsWith('/') ? appUrl.slice(0, -1) : appUrl;
 
   if (code) {
     const supabase = await createClient();
